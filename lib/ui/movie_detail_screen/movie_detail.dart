@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:movie_mania/utils/image_data.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 
+import 'detail_bottom_sheet.dart';
+
 class MovieDetail extends StatefulWidget {
   final int movieId;
   MovieDetail({
@@ -15,6 +17,30 @@ class _MovieDetailState extends State<MovieDetail> {
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
   //image data temporary
   static final List<String> imageData = ImageData.getDestinationsData;
+
+  openBottomSheet() async {
+    await showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) {
+          return FractionallySizedBox(
+            alignment: Alignment.bottomCenter,
+            heightFactor: 0.7,
+            child: MovieDetailBottomSheet(),
+          );
+        });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => Future.delayed(const Duration(milliseconds: 200), () async {
+              openBottomSheet();
+            }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
