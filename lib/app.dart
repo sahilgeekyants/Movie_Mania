@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/home.dart';
+import 'ui/home_screen/home.dart';
 
 //Navigation key
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
