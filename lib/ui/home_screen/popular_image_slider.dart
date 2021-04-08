@@ -54,7 +54,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
               return Container(
                 child: Image.asset(
                   item,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.cover,
                   width: scaleConfig.scaleWidth(120),
                   height: scaleConfig.scaleHeight(160),
                   frameBuilder:

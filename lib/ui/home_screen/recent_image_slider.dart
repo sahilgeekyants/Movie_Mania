@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_mania/app.dart';
+import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
 import 'package:movie_mania/utils/image_data.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 
@@ -56,7 +58,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
               return Container(
                 child: Image.asset(
                   item,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.cover,
                   width: scaleConfig.scaleWidth(320),
                   height: scaleConfig.scaleHeight(_isCenterPage ? 450 : 380),
                   frameBuilder:
@@ -78,6 +80,12 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                   //allow to click only center page in recent section
                                   if (_isCenterPage) {
                                     print('Image clicked index : $_imageIndex');
+                                    navigatorKey.currentState.push(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              MovieDetail(
+                                                  movieId: _imageIndex)),
+                                    );
                                   }
                                 },
                                 child: child,
