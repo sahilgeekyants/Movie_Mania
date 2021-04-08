@@ -51,7 +51,8 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
               },
             ),
             items: imageData.map((item) {
-              bool _isCenterPage = pageIndex == imageData.indexOf(item);
+              int _imageIndex = imageData.indexOf(item);
+              bool _isCenterPage = pageIndex == _imageIndex;
               return Container(
                 child: Image.asset(
                   item,
@@ -74,7 +75,10 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                   BorderRadius.all(Radius.circular(28)),
                               child: GestureDetector(
                                 onTap: () {
-                                  print('Image clicked index : $pageIndex');
+                                  //allow to click only center page in recent section
+                                  if (_isCenterPage) {
+                                    print('Image clicked index : $_imageIndex');
+                                  }
                                 },
                                 child: child,
                               ),
@@ -87,7 +91,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                   color: Colors.grey[600].withOpacity(0.2),
                                   spreadRadius: 0,
                                   blurRadius: 5,
-                                  offset: Offset(0, 10),
+                                  offset: Offset(0, _isCenterPage ? 10 : 0),
                                 ),
                               ],
                             ),
@@ -99,6 +103,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                 bottom: scaleConfig.scaleHeight(10)),
                             child: Text(
                               'Joker',
+                              maxLines: 1,
                               style: TextStyle(
                                 color: _isCenterPage
                                     ? Colors.black
@@ -112,6 +117,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                           Container(
                             child: Text(
                               'Crime, Drama, Thriller',
+                              maxLines: 1,
                               style: TextStyle(
                                 color: _isCenterPage
                                     ? Colors.black45

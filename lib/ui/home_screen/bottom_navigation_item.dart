@@ -46,6 +46,7 @@ class BottomNavigationItem extends StatelessWidget {
                       SizedBox(width: scaleConfig.scaleWidth(5)),
                       Text(
                         label,
+                        maxLines: 1,
                         style: TextStyle(
                           color: Colors.black87,
                           fontSize: scaleConfig.scaleWidth(19),
