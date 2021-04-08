@@ -65,13 +65,19 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                       padding:
                           EdgeInsets.only(right: scaleConfig.scaleWidth(20)),
                       child: ListView(
+                        physics: NeverScrollableScrollPhysics(),
                         children: [
                           //image
                           Container(
                             child: ClipRRect(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(28)),
-                              child: child,
+                              child: GestureDetector(
+                                onTap: () {
+                                  print('Image clicked index : $pageIndex');
+                                },
+                                child: child,
+                              ),
                             ),
                             decoration: BoxDecoration(
                               borderRadius:

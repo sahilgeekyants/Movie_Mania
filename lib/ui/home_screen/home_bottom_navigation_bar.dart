@@ -1,12 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:movie_mania/utils/scale_config.dart';
+import 'bottom_navigation_item.dart';
 
-class HomeBottomNavigationBar extends StatelessWidget {
+class HomeBottomNavigationBar extends StatefulWidget {
+  @override
+  _HomeBottomNavigationBarState createState() =>
+      _HomeBottomNavigationBarState();
+}
+
+class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
+  int _currentIndex;
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = 0;
+  }
+
+  onItemSelected(int index) {
+    //item tapped
+    print('item:$index tapped in BottomNavigationBar');
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: scaleConfig.scaleWidth(100),
       decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(30), topLeft: Radius.circular(30)),
         boxShadow: [
@@ -18,57 +43,34 @@ class HomeBottomNavigationBar extends StatelessWidget {
           topLeft: Radius.circular(30.0),
           topRight: Radius.circular(30.0),
         ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: 0,
-          // fixedColor: Colors.black87,
-          // unselectedItemColor: Colors.grey,
-          iconSize: scaleConfig.scaleWidth(30),
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedIconTheme: IconThemeData(
-            color: Colors.black87,
-            size: scaleConfig.scaleWidth(38),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: scaleConfig.scaleWidth(30)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              BottomNavigationItem(
+                label: 'Feed',
+                iconData: Icons.description_outlined,
+                itemIndex: 0,
+                isItemSelected: _currentIndex == 0,
+                onTap: onItemSelected,
+              ),
+              BottomNavigationItem(
+                label: 'Star',
+                iconData: Icons.bookmark_outline_rounded,
+                itemIndex: 1,
+                isItemSelected: _currentIndex == 1,
+                onTap: onItemSelected,
+              ),
+              BottomNavigationItem(
+                label: 'Person',
+                iconData: Icons.person_outline,
+                itemIndex: 2,
+                isItemSelected: _currentIndex == 2,
+                onTap: onItemSelected,
+              ),
+            ],
           ),
-          unselectedIconTheme: IconThemeData(
-            color: Colors.grey,
-            size: scaleConfig.scaleWidth(34),
-          ),
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.description_outlined),
-              // activeIcon: Container(
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.all(Radius.circular(30)),
-              //     color: Colors.grey[300],
-              //   ),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: <Widget>[
-              //       Icon(Icons.description_outlined),
-              //       Text(
-              //         'Feed',
-              //         style: TextStyle(
-              //           color: Colors.black87,
-              //           fontSize: scaleConfig.scaleWidth(17),
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              label: 'Feed',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_outline_rounded),
-              label: 'Bookmark',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              label: 'Person',
-            ),
-          ],
         ),
       ),
     );
