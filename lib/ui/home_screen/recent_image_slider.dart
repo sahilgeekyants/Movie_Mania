@@ -73,6 +73,18 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                   BorderRadius.all(Radius.circular(28)),
                               child: child,
                             ),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(28)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey[600].withOpacity(0.2),
+                                  spreadRadius: 0,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 10),
+                                ),
+                              ],
+                            ),
                           ),
                           //Movie Title
                           Container(
