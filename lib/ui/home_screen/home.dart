@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'home_app_bar.dart';
 import 'home_bottom_navigation_bar.dart';
+import 'popular_image_slider.dart';
 import 'recent_image_slider.dart';
 
 class Home extends StatefulWidget {
@@ -14,7 +15,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    // orfixientation for now
+    //fix orientation for now
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -43,7 +44,9 @@ class _HomeState extends State<Home> {
         top: false,
         bottom: false,
         child: ListView(
+          physics: ClampingScrollPhysics(),
           children: <Widget>[
+            //Recent section
             Padding(
               padding: EdgeInsets.only(
                 left: scaleConfig.scaleWidth(55),
@@ -61,6 +64,9 @@ class _HomeState extends State<Home> {
             ),
             //Recent images
             RecentImageSlider(),
+            //Popular section
+            SizedBox(height: scaleConfig.scaleHeight(40)),
+            PopularImageSlider(),
           ],
         ),
       ),
