@@ -7,6 +7,7 @@ import 'popular_image_slider.dart';
 import 'recent_image_slider.dart';
 
 class Home extends StatefulWidget {
+  static const String routeName = '/';
   @override
   _HomeState createState() => _HomeState();
 }
