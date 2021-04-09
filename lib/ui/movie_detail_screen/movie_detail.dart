@@ -3,12 +3,20 @@ import 'package:movie_mania/utils/image_data.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 
 class MovieDetail extends StatefulWidget {
+  static const String routeName = '/movie_detail';
   final int movieId;
   MovieDetail({
     @required this.movieId,
   });
   @override
   _MovieDetailState createState() => _MovieDetailState();
+}
+
+class MovieDetailArguments {
+  final int movieId;
+  MovieDetailArguments({
+    @required this.movieId,
+  });
 }
 
 class _MovieDetailState extends State<MovieDetail> {

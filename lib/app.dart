@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mania/router.dart';
 import 'ui/home_screen/home.dart';
 
 //Navigation key
@@ -35,9 +36,8 @@ class _AppState extends State<App> {
         fontFamily: 'Roboto',
         primarySwatch: white,
       ),
-      home: Scaffold(
-        body: Home(),
-      ),
+      onGenerateRoute: MyRouter.generateRoute,
+      initialRoute: Home.routeName,
     );
   }
 }

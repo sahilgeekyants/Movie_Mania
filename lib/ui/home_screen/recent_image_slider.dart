@@ -80,11 +80,11 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                   //allow to click only center page in recent section
                                   if (_isCenterPage) {
                                     print('Image clicked index : $_imageIndex');
-                                    navigatorKey.currentState.push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              MovieDetail(
-                                                  movieId: _imageIndex)),
+                                    navigatorKey.currentState.pushNamed(
+                                      MovieDetail.routeName,
+                                      arguments: MovieDetailArguments(
+                                        movieId: _imageIndex,
+                                      ),
                                     );
                                   }
                                 },
