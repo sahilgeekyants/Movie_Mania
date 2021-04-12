@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mania/ui/splash_screen/splash.dart';
 import 'ui/home_screen/home.dart';
 import 'ui/movie_detail_screen/movie_detail.dart';
 
@@ -7,6 +8,8 @@ class MyRouter {
   // static const String movieDetailRoute = '/movie_detail';
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case Splash.routeName:
+        return MaterialPageRoute(builder: (context) => Splash());
       case Home.routeName:
         return MaterialPageRoute(builder: (context) => Home());
       case MovieDetail.routeName:

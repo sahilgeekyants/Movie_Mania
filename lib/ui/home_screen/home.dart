@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/utils/scale_config.dart';
@@ -9,7 +8,7 @@ import 'popular_image_slider.dart';
 import 'recent_image_slider.dart';
 
 class Home extends StatefulWidget {
-  static const String routeName = '/';
+  static const String routeName = '/home';
   @override
   _HomeState createState() => _HomeState();
 }
@@ -19,10 +18,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    //fix orientation for now
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
     _moviesBloc = MoviesBloc();
   }
 
