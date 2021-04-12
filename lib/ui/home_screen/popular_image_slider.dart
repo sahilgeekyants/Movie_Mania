@@ -7,6 +7,8 @@ import 'package:movie_mania/models/movies_model.dart';
 import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
 // import 'package:movie_mania/utils/image_data.dart';
 import 'package:movie_mania/utils/scale_config.dart';
+import 'package:movie_mania/utils/widgets/circularIndicator.dart';
+import 'package:movie_mania/utils/widgets/message.dart';
 
 import '../../app.dart';
 
@@ -42,20 +44,20 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
         bloc: BlocProvider.of<MoviesBloc>(context),
         builder: (context, state) {
           if (state is MoviesUninitializedState) {
-            print("Unintialised State");
-            return Message(message: "Unintialised State");
+            print("Recent- Unintialised State");
+            return CircularIndicator(height: 200);
           } else if (state is MoviesEmptyState) {
-            print("No Players found");
+            print("Recent- No Players found");
             return Message(message: "No Players found");
           } else if (state is MoviesEmptyState) {
-            print("Something went wrong");
+            print("Recent- Something went wrong");
             return Message(message: "Something went wrong");
           } else if (state is MoviesFetchingState) {
-            print("Progess State");
-            return Expanded(child: Center(child: CircularProgressIndicator()));
+            print("Recent- Progess State");
+            return CircularIndicator(height: 200);
           } else {
-            print("Displaying State");
-            final stateAsPlayerFetchedState = state as MoviesFetchedState;
+            print("Recent- Displaying State");
+            final stateAsPlayerFetchedState = state;
             final movies = stateAsPlayerFetchedState.movies;
             return buildSlider(movies);
           }
@@ -165,25 +167,6 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
           }).toList(),
         ),
       ],
-    );
-  }
-}
-
-class Message extends StatelessWidget {
-  final String message;
-
-  Message({this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Text(
-          message,
-          style: TextStyle(fontSize: 22.0, color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-      ),
     );
   }
 }

@@ -9,6 +9,8 @@ import 'package:movie_mania/models/movies_model.dart';
 import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
 // import 'package:movie_mania/utils/image_data.dart';
 import 'package:movie_mania/utils/scale_config.dart';
+import 'package:movie_mania/utils/widgets/circularIndicator.dart';
+import 'package:movie_mania/utils/widgets/message.dart';
 
 class RecentImageSlider extends StatefulWidget {
   @override
@@ -32,7 +34,6 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // BlocProvider.of<MoviesBloc>(context).dispatch(MoviesListingEvent.display);
   }
 
   @override
@@ -50,7 +51,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
         builder: (context, state) {
           if (state is MoviesUninitializedState) {
             print("Recent- Unintialised State");
-            return Message(message: "Unintialised State");
+            return CircularIndicator(height: 500);
           } else if (state is MoviesEmptyState) {
             print("Recent- No Players found");
             return Message(message: "No Players found");
@@ -59,10 +60,10 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
             return Message(message: "Something went wrong");
           } else if (state is MoviesFetchingState) {
             print("Recent- Progess State");
-            return Expanded(child: Center(child: CircularProgressIndicator()));
+            return CircularIndicator(height: 500);
           } else {
             print("Recent- Displaying State");
-            final stateAsPlayerFetchedState = state as MoviesFetchedState;
+            final stateAsPlayerFetchedState = state;
             final movies = stateAsPlayerFetchedState.movies;
             return buildSlider(movies);
           }
@@ -181,25 +182,6 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
           }).toList(),
         ),
       ],
-    );
-  }
-}
-
-class Message extends StatelessWidget {
-  final String message;
-
-  Message({this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Text(
-          message,
-          style: TextStyle(fontSize: 22.0, color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-      ),
     );
   }
 }
