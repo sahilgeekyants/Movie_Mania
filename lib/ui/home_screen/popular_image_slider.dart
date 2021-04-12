@@ -4,12 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
 import 'package:movie_mania/models/movies_model.dart';
+import 'package:movie_mania/services/config/config.dart';
 import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
-// import 'package:movie_mania/utils/image_data.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
 import 'package:movie_mania/utils/widgets/message.dart';
-
 import '../../app.dart';
 
 class PopularImageSlider extends StatefulWidget {
@@ -19,8 +18,6 @@ class PopularImageSlider extends StatefulWidget {
 
 class _PopularImageSliderState extends State<PopularImageSlider> {
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
-  //image data temporary
-  // static final List<String> imageData = ImageData.getDestinationsData;
   CarouselController sliderController;
   int pageIndex;
   @override
@@ -44,19 +41,19 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
         bloc: BlocProvider.of<MoviesBloc>(context),
         builder: (context, state) {
           if (state is MoviesUninitializedState) {
-            print("Recent- Unintialised State");
+            print("Popular- Unintialised State");
             return CircularIndicator(height: 200);
           } else if (state is MoviesEmptyState) {
-            print("Recent- No Players found");
+            print("Popular- No Players found");
             return Message(message: "No Players found");
           } else if (state is MoviesEmptyState) {
-            print("Recent- Something went wrong");
+            print("Popular- Something went wrong");
             return Message(message: "Something went wrong");
           } else if (state is MoviesFetchingState) {
-            print("Recent- Progess State");
+            print("Popular- Progess State");
             return CircularIndicator(height: 200);
           } else {
-            print("Recent- Displaying State");
+            // print("Popular- Displaying State");
             final stateAsPlayerFetchedState = state;
             final movies = stateAsPlayerFetchedState.movies;
             return buildSlider(movies);
@@ -74,7 +71,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
           options: CarouselOptions(
             height: scaleConfig.scaleHeight(250),
             enableInfiniteScroll: true,
-            autoPlay: false,
+            autoPlay: true,
             aspectRatio: 2,
             viewportFraction: 0.45,
             enlargeCenterPage: false,
@@ -85,14 +82,13 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
               });
             },
           ),
-          // items: imageData.map((item) {
           items: movies.results.map((item) {
             int _imageIndex = movies.results.indexOf(item);
-            String posterPath =
-                'https://image.tmdb.org/t/p/w185${item.poster_path}';
+            String _posterPath = Config.baseImageUrl + item.poster_path;
+            String _title = item.title;
             return Container(
               child: Image.network(
-                posterPath,
+                _posterPath,
                 fit: BoxFit.cover,
                 width: scaleConfig.scaleWidth(120),
                 height: scaleConfig.scaleHeight(160),
@@ -112,7 +108,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
                                 navigatorKey.currentState.pushNamed(
                                   MovieDetail.routeName,
                                   arguments: MovieDetailArguments(
-                                    moviePosterUrl: posterPath,
+                                    moviePosterUrl: _posterPath,
                                   ),
                                 );
                               },
@@ -136,8 +132,10 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
                           padding: EdgeInsets.only(
                               top: scaleConfig.scaleHeight(10),
                               bottom: scaleConfig.scaleHeight(5)),
+                          margin: EdgeInsets.only(
+                              right: scaleConfig.scaleWidth(20)),
                           child: Text(
-                            'Joker',
+                            _title,
                             maxLines: 1,
                             style: TextStyle(
                               color: Colors.black,
@@ -148,9 +146,11 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
                         ),
                         //Movie Tags
                         Container(
+                          margin: EdgeInsets.only(
+                              right: scaleConfig.scaleWidth(50)),
                           child: Text(
-                            'Crime, Drama',
-                            maxLines: 1,
+                            'Crime Drama Thril Sci-Fi',
+                            maxLines: 2,
                             style: TextStyle(
                               color: Colors.black45,
                               fontSize: scaleConfig.scaleWidth(17),
