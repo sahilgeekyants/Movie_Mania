@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_mania/services/config/config.dart';
 import 'package:movie_mania/services/config/shared_preference.dart';
-import 'refresh_token.dart';
+import 'package:movie_mania/utils/constants/api_request_types.dart';
 import 'response.dart';
 
 class HttpServiceHelper {
   static Future<Response> httpRequestsHandler(
     String url,
-    String requestType, {
+    ApiRequestType requestType, {
     Map<String, String> headers,
     dynamic body,
     Encoding encoding,
@@ -19,40 +19,23 @@ class HttpServiceHelper {
     try {
       // print("Inside switch ------->> $requestType , $url , $body");
       switch (requestType) {
-        case "GET":
+        case ApiRequestType.GET:
           response = await http.get(url, headers: headers);
           break;
-        case "POST":
+        case ApiRequestType.POST:
           response = await http.post(url,
               headers: headers, body: body, encoding: encoding);
           break;
-        case "PUT":
+        case ApiRequestType.PUT:
           response = await http.put(url,
               headers: headers, body: body, encoding: encoding);
           break;
-        case "PATCH":
+        case ApiRequestType.PATCH:
           response = await http.patch(url,
               headers: headers, body: body, encoding: encoding);
           break;
-        case "DELETE":
+        case ApiRequestType.DELETE:
           response = await http.delete(url, headers: headers);
-          break;
-        case 'MULTIPART':
-          var uri = Uri.parse(url);
-          var request = new http.MultipartRequest("POST", uri);
-          request.files.clear();
-
-          if (body["data"] != null) {
-            request.fields["data"] = body["data"];
-          }
-
-          request.files.addAll(body['files']);
-          // print("request is in MULTIPART ${request.files.length}");
-          var token = await localStorage.getToken();
-          request.headers['Authorization'] = "Bearer $token";
-          var res = await request.send();
-          response = await http.Response.fromStream(res);
-          print("response under http is ${response.body}");
           break;
         default:
           throw "No method type match";
@@ -86,10 +69,8 @@ class _HttpServiceHelper {
       http.Response response, requestType, url, headers, body, encoding) async {
     final int _statusCode = response.statusCode;
     String loginUrl = "${Config.baseUrl}" + "auth/token";
-    if (_statusCode == 400 &&
-        url == loginUrl &&
-        body.contains("refresh_token")) {
-      await localStorage.clearUserAndToken();
+    if (_statusCode == 400) {
+      // await localStorage.clearUserAndToken();
       // DatabaseTables.tableNames.forEach((tableName) async {
       //   await SqliteTransactionsService().clearContent(tableName);
       // });
@@ -98,11 +79,12 @@ class _HttpServiceHelper {
       //     MaterialPageRoute(builder: (context) => Register()),
       //     (route) => false);
     } else if (_statusCode == 401 && url != loginUrl) {
-      Response refreshResponse = await RefreshToken()
-          .handleRefreshToken(requestType, url, headers, body);
-      if (refreshResponse != null) {
-        return refreshResponse;
-      }
+      //handle refresh token here
+      // Response refreshResponse = await RefreshToken()
+      //     .handleRefreshToken(requestType, url, headers, body);
+      // if (refreshResponse != null) {
+      //   return refreshResponse;
+      // }
       throw _errorResponse("response is null", response, url, headers, body);
     } else if (_statusCode >= 400 && _statusCode != 401) {
       return _errorResponse("${response.body}", response, url, headers, body);
@@ -116,24 +98,13 @@ class _HttpServiceHelper {
     http.Response response,
   ) {
     try {
-      if (response.headers.containsValue("application/pdf") ||
-          response.headers.containsValue("application/octet-stream")) {
-        Response pdfResponse = Response();
-        pdfResponse.status = true;
-        pdfResponse.body = response.bodyBytes;
-        pdfResponse.message = 'API call successfully done';
-        pdfResponse.headers = response.headers;
-        pdfResponse.responseStatus = response.statusCode;
-        return pdfResponse;
-      } else {
-        return Response.fromJson({
-          'status': true,
-          'body': response.body,
-          'message': 'API call successfully done',
-          'header': response.headers,
-          'response_status': response.statusCode
-        });
-      }
+      return Response.fromJson({
+        'status': true,
+        'body': response.body,
+        'message': 'API call successfully done',
+        'header': response.headers,
+        'response_status': response.statusCode
+      });
     } catch (exception) {
       return _errorResponse("Unable to decode body", response, "", {}, "");
     }
@@ -141,12 +112,12 @@ class _HttpServiceHelper {
 
   static Response _errorResponse(String message, http.Response response,
       String url, dynamic headers, dynamic body) {
-    dynamic crashErrorBody = {
-      "url": url,
-      "message": message,
-      "body": body,
-      "response": response
-    };
+    // dynamic crashErrorBody = {
+    //   "url": url,
+    //   "message": message,
+    //   "body": body,
+    //   "response": response
+    // };
     // FirebaseCrashlytics.instance.log(crashErrorBody.toString());
     return Response.fromJson({
       'status': false,
