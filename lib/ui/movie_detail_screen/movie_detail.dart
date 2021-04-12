@@ -4,25 +4,25 @@ import 'package:movie_mania/utils/scale_config.dart';
 
 class MovieDetail extends StatefulWidget {
   static const String routeName = '/movie_detail';
-  final int movieId;
+  final String moviePosterUrl;
   MovieDetail({
-    @required this.movieId,
+    @required this.moviePosterUrl,
   });
   @override
   _MovieDetailState createState() => _MovieDetailState();
 }
 
 class MovieDetailArguments {
-  final int movieId;
+  final String moviePosterUrl;
   MovieDetailArguments({
-    @required this.movieId,
+    @required this.moviePosterUrl,
   });
 }
 
 class _MovieDetailState extends State<MovieDetail> {
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
   //image data temporary
-  static final List<String> imageData = ImageData.getDestinationsData;
+  // static final List<String> imageData = ImageData.getDestinationsData;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -31,7 +31,7 @@ class _MovieDetailState extends State<MovieDetail> {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(imageData[widget.movieId]),
+              image: NetworkImage(widget.moviePosterUrl),
               fit: BoxFit.cover,
             ),
           ),
@@ -54,7 +54,8 @@ class _MovieDetailState extends State<MovieDetail> {
                 size: scaleConfig.scaleWidth(40),
               ),
               onPressed: () {
-                print('Going back from Detail page- id:${widget.movieId}');
+                print(
+                    'Going back from Detail page- id:${widget.moviePosterUrl}');
                 Navigator.pop(context);
               },
             ),
@@ -70,7 +71,7 @@ class _MovieDetailState extends State<MovieDetail> {
                   size: scaleConfig.scaleWidth(40),
                 ),
                 onPressed: () {
-                  print('Bookmark pressed on page id:${widget.movieId}');
+                  print('Bookmark pressed on page id:${widget.moviePosterUrl}');
                 },
               ),
             ],
