@@ -84,7 +84,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
           ),
           items: movies.results.map((item) {
             int _imageIndex = movies.results.indexOf(item);
-            String _posterPath = Config.baseImageUrl + item.poster_path;
+            String _posterPath = Config.baseImageUrl + item.posterPath;
             String _title = item.title;
             return Container(
               child: Image.network(

@@ -93,7 +93,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
           items: movies.results.map((item) {
             int _imageIndex = movies.results.indexOf(item);
             bool _isCenterPage = pageIndex == _imageIndex;
-            String _posterPath = Config.baseImageUrl + item.poster_path;
+            String _posterPath = Config.baseImageUrl + item.posterPath;
             String _title = item.title;
             return Container(
               child: Image.network(

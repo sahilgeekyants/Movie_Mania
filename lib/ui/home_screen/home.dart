@@ -48,7 +48,6 @@ class _HomeState extends State<Home> {
           child: ListView(
             physics: ClampingScrollPhysics(),
             children: <Widget>[
-              //Recent section
               Padding(
                 padding: EdgeInsets.only(
                   left: scaleConfig.scaleWidth(55),
@@ -56,7 +55,7 @@ class _HomeState extends State<Home> {
                   bottom: scaleConfig.scaleHeight(15),
                 ),
                 child: Text(
-                  'Recent',
+                  'Popular',
                   style: TextStyle(
                     color: Colors.black87,
                     fontSize: scaleConfig.scaleWidth(23),
@@ -64,7 +63,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              //Recent images
+              //Poplar Movies images
               RecentImageSlider(),
               //Popular section
               SizedBox(height: scaleConfig.scaleHeight(40)),

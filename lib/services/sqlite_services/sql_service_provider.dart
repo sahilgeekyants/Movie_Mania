@@ -9,7 +9,8 @@ class SqlServiceProvider {
   static Database _db;
   //
   static List<String> _initialScript = [
-    "CREATE TABLE ${DbTables.movieGenres} (id INTEGER NOT NULL , name  text NOT NULL, PRIMARY KEY (id))",
+    "CREATE TABLE ${DbTables.movieGenres} (id INTEGER NOT NULL , name text NOT NULL, PRIMARY KEY (id))",
+    "CREATE TABLE ${DbTables.recentOpenMovie} (id INTEGER NOT NULL , title text NOT NULL, poster_path text NOT NULL, genre_ids text NOT NULL, bookmarked INTEGER NOT NULL, PRIMARY KEY (id))", //table for recently searched movies (genre-ids separated by ,)
   ];
   //
   static List<String> _migrationScript = [];
