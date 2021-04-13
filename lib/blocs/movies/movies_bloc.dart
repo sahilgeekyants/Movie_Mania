@@ -3,6 +3,8 @@ import 'package:movie_mania/blocs/movies/movies_listing_events.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
 import 'package:movie_mania/models/movies_model.dart';
 import 'package:movie_mania/repository/movies_repository.dart';
+import 'package:movie_mania/services/http_service/response.dart';
+import 'package:movie_mania/utils/constants/messages.dart';
 // import 'package:rxdart/rxdart.dart';
 
 class MoviesBloc extends Bloc<MoviesListingEvent, MoviesListingState> {
@@ -31,17 +33,19 @@ class MoviesBloc extends Bloc<MoviesListingEvent, MoviesListingState> {
   Stream<MoviesListingState> mapEventToState(MoviesListingEvent event) async* {
     yield MoviesLoadingState(msg: "Loading");
     MoviesModel _movies;
+    Response _response;
     if (event == MoviesListingEvent.display) {
-      _movies = await _repository.fetchAllMovies();
+      _response = await _repository.fetchAllMovies();
+      _movies = _response.body;
     }
     if (_movies != null) {
       if (_movies.results.length == 0) {
-        yield MoviesErrorState(errMsg: "Empty result");
+        yield MoviesErrorState(errMsg: ToastMessages.errorMessage["emptyData"]);
       } else {
         yield MoviesFetchedState(movies: _movies);
       }
     } else {
-      yield MoviesErrorState(errMsg: "specify error"); //
+      yield MoviesErrorState(errMsg: _response.message); //
     }
   }
 }
