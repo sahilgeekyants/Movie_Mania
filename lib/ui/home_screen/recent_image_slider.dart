@@ -50,7 +50,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
           if (state is MoviesErrorState) {
             final MoviesErrorState fetchedState = state;
             print("Popular ErrorState msg: ${fetchedState.errMsg}");
-            return Message(message: fetchedState.errMsg);
+            return Message(message: fetchedState.errMsg, height: 400);
           } else if (state is MoviesLoadingState) {
             final MoviesLoadingState fetchedState = state;
             print("Popular- Progess State msg: ${fetchedState.msg}");

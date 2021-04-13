@@ -43,11 +43,11 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
           if (state is MoviesErrorState) {
             final MoviesErrorState fetchedState = state;
             print("Slider ErrorState msg: ${fetchedState.errMsg}");
-            return Message(message: fetchedState.errMsg);
+            return Message(message: fetchedState.errMsg, height: 200);
           } else if (state is MoviesLoadingState) {
             final MoviesLoadingState fetchedState = state;
             print("Slider- Progess State msg: ${fetchedState.msg}");
-            return CircularIndicator(height: 500);
+            return CircularIndicator(height: 100);
           } else {
             // print("Slider- Displaying State");
             final fetchedState = state as MoviesFetchedState;
