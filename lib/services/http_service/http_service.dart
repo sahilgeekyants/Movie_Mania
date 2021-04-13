@@ -68,7 +68,7 @@ class _HttpServiceHelper {
   static Future<Response> _identifyResponse(
       http.Response response, requestType, url, headers, body, encoding) async {
     final int _statusCode = response.statusCode;
-    String loginUrl = "${Config.baseUrl}" + "auth/token";
+    // String loginUrl = "${Config.baseUrl}" + "auth/token";
     if (_statusCode == 400) {
       // await localStorage.clearUserAndToken();
       // DatabaseTables.tableNames.forEach((tableName) async {
@@ -78,14 +78,14 @@ class _HttpServiceHelper {
       // return navigatorKey.currentState.pushAndRemoveUntil(
       //     MaterialPageRoute(builder: (context) => Register()),
       //     (route) => false);
-    } else if (_statusCode == 401 && url != loginUrl) {
+    } else if (_statusCode == 401) {
       //handle refresh token here
       // Response refreshResponse = await RefreshToken()
       //     .handleRefreshToken(requestType, url, headers, body);
       // if (refreshResponse != null) {
       //   return refreshResponse;
       // }
-      throw _errorResponse("response is null", response, url, headers, body);
+      return _errorResponse("response is null", response, url, headers, body);
     } else if (_statusCode >= 400 && _statusCode != 401) {
       return _errorResponse("${response.body}", response, url, headers, body);
     } else if (_statusCode >= 200 && _statusCode < 300) {
