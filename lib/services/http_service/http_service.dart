@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:movie_mania/services/config/config.dart';
 import 'package:movie_mania/services/config/shared_preference.dart';
 import 'package:movie_mania/utils/constants/api_request_types.dart';
+import 'package:movie_mania/utils/constants/messages.dart';
 import 'response.dart';
 
 class HttpServiceHelper {
@@ -44,10 +45,20 @@ class HttpServiceHelper {
       print("error ocuured --->> $exception");
       if (exception.runtimeType == SocketException) {
         return _HttpServiceHelper._errorResponse(
-            "NoInternet Error", response, url, headers, body.toString());
+          ToastMessages.errorMessage["NoInternet"],
+          response,
+          url,
+          headers,
+          body.toString(),
+        );
       } else {
         return _HttpServiceHelper._errorResponse(
-            "httpError Error", response, url, headers, body.toString());
+          ToastMessages.errorMessage["httpError"],
+          response,
+          url,
+          headers,
+          body.toString(),
+        );
       }
     }
     return _HttpServiceHelper._handleResponse(
@@ -78,6 +89,7 @@ class _HttpServiceHelper {
       // return navigatorKey.currentState.pushAndRemoveUntil(
       //     MaterialPageRoute(builder: (context) => Register()),
       //     (route) => false);
+      return _errorResponse("Session Expired", response, url, headers, body);
     } else if (_statusCode == 401) {
       //handle refresh token here
       // Response refreshResponse = await RefreshToken()
@@ -112,13 +124,6 @@ class _HttpServiceHelper {
 
   static Response _errorResponse(String message, http.Response response,
       String url, dynamic headers, dynamic body) {
-    // dynamic crashErrorBody = {
-    //   "url": url,
-    //   "message": message,
-    //   "body": body,
-    //   "response": response
-    // };
-    // FirebaseCrashlytics.instance.log(crashErrorBody.toString());
     return Response.fromJson({
       'status': false,
       'body': null,

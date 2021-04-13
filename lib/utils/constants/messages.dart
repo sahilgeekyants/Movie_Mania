@@ -5,6 +5,7 @@ class ToastMessages {
     "NoInternet": "Poor Internet detected, Please check network connection",
   };
   static Map<String, String> succesMessage = {
+    "success": "Api call succeeded",
     "cloudSyncSuccess": "Upload succeeded",
     "everythingInSync": "Cloud is synced",
   };
