@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mania/router.dart';
 import 'ui/home_screen/home.dart';
+import 'ui/splash_screen/splash.dart';
 
 //Navigation key
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
@@ -35,9 +37,9 @@ class _AppState extends State<App> {
         fontFamily: 'Roboto',
         primarySwatch: white,
       ),
-      home: Scaffold(
-        body: Home(),
-      ),
+      onGenerateRoute: MyRouter.generateRoute,
+      // initialRoute: Home.routeName,
+      initialRoute: Splash.routeName,
     );
   }
 }
