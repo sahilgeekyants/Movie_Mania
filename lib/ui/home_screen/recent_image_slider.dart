@@ -47,22 +47,18 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
       child: BlocBuilder(
         bloc: BlocProvider.of<MoviesBloc>(context),
         builder: (context, state) {
-          if (state is MoviesUninitializedState) {
-            print("Recent- Unintialised State");
-            return CircularIndicator(height: 500);
-          } else if (state is MoviesEmptyState) {
-            print("Recent- No Players found");
-            return Message(message: "No Players found");
-          } else if (state is MoviesEmptyState) {
-            print("Recent- Something went wrong");
-            return Message(message: "Something went wrong");
-          } else if (state is MoviesFetchingState) {
-            print("Recent- Progess State");
+          if (state is MoviesErrorState) {
+            final MoviesErrorState fetchedState = state;
+            print("Popular ErrorState msg: ${fetchedState.errMsg}");
+            return Message(message: fetchedState.errMsg);
+          } else if (state is MoviesLoadingState) {
+            final MoviesLoadingState fetchedState = state;
+            print("Popular- Progess State msg: ${fetchedState.msg}");
             return CircularIndicator(height: 500);
           } else {
-            print("Recent- Displaying State");
-            final stateAsPlayerFetchedState = state;
-            final movies = stateAsPlayerFetchedState.movies;
+            print("Popular- Displaying State");
+            final fetchedState = state as MoviesFetchedState;
+            final movies = fetchedState.movies;
             return buildSlider(movies);
           }
         },

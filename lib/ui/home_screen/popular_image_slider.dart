@@ -40,22 +40,18 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
       child: BlocBuilder(
         bloc: BlocProvider.of<MoviesBloc>(context),
         builder: (context, state) {
-          if (state is MoviesUninitializedState) {
-            print("Popular- Unintialised State");
-            return CircularIndicator(height: 200);
-          } else if (state is MoviesEmptyState) {
-            print("Popular- No Players found");
-            return Message(message: "No Players found");
-          } else if (state is MoviesEmptyState) {
-            print("Popular- Something went wrong");
-            return Message(message: "Something went wrong");
-          } else if (state is MoviesFetchingState) {
-            print("Popular- Progess State");
-            return CircularIndicator(height: 200);
+          if (state is MoviesErrorState) {
+            final MoviesErrorState fetchedState = state;
+            print("Slider ErrorState msg: ${fetchedState.errMsg}");
+            return Message(message: fetchedState.errMsg);
+          } else if (state is MoviesLoadingState) {
+            final MoviesLoadingState fetchedState = state;
+            print("Slider- Progess State msg: ${fetchedState.msg}");
+            return CircularIndicator(height: 500);
           } else {
-            // print("Popular- Displaying State");
-            final stateAsPlayerFetchedState = state;
-            final movies = stateAsPlayerFetchedState.movies;
+            // print("Slider- Displaying State");
+            final fetchedState = state as MoviesFetchedState;
+            final movies = fetchedState.movies;
             return buildSlider(movies);
           }
         },

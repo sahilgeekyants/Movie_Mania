@@ -45,7 +45,13 @@ class _HomeState extends State<Home> {
         body: SafeArea(
           top: false,
           bottom: false,
-          child: ListView(
+          child:
+              // RefreshIndicator(
+              //   onRefresh: () async {
+              //     //
+              //   },
+              //   child:
+              ListView(
             physics: ClampingScrollPhysics(),
             children: <Widget>[
               Padding(
@@ -70,6 +76,7 @@ class _HomeState extends State<Home> {
               PopularImageSlider(),
             ],
           ),
+          // ),
         ),
       ),
     );
