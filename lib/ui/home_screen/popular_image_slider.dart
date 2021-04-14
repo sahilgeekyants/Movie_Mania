@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
+import 'package:movie_mania/models/db_data_models/movie_data_model.dart';
 import 'package:movie_mania/models/ui_data_models/movies_model.dart';
 import 'package:movie_mania/services/config/config.dart';
 import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
+import 'package:movie_mania/services/local_db_services/boxes/recently_opened_movies_box.dart';
 import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
@@ -101,8 +103,21 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(22)),
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 print('Image clicked index : $_imageIndex');
+                                //Add this to Recently opened Movies Box of DB
+                                await RecentlyOpenedMoviesBox.addMovie(
+                                  MovieDataModel(
+                                    id: item.id,
+                                    title: item.title,
+                                    posterPath: item.posterPath,
+                                    genreIds: item.genreIds,
+                                    overview: item.overview,
+                                    bookmarked: false,
+                                    lastOpened: DateTime.now(),
+                                  ),
+                                );
+                                //
                                 navigatorKey.currentState.pushNamed(
                                   MovieDetail.routeName,
                                   arguments: MovieDetailArguments(
