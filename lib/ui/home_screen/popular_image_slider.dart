@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
-import 'package:movie_mania/models/movies_model.dart';
+import 'package:movie_mania/models/ui_data_models/movies_model.dart';
 import 'package:movie_mania/services/config/config.dart';
+import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
 import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
@@ -82,6 +83,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
             int _imageIndex = movies.results.indexOf(item);
             String _posterPath = Config.baseImageUrl + item.posterPath;
             String _title = item.title;
+            String _genres = GenreBox.getGenreListString(item.genreIds) ?? "";
             return Container(
               child: Image.network(
                 _posterPath,
@@ -145,7 +147,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
                           margin: EdgeInsets.only(
                               right: scaleConfig.scaleWidth(50)),
                           child: Text(
-                            'Crime Drama Thril Sci-Fi',
+                            _genres,
                             maxLines: 2,
                             style: TextStyle(
                               color: Colors.black45,

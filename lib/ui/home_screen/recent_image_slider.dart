@@ -5,8 +5,9 @@ import 'package:movie_mania/app.dart';
 import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_events.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
-import 'package:movie_mania/models/movies_model.dart';
+import 'package:movie_mania/models/ui_data_models/movies_model.dart';
 import 'package:movie_mania/services/config/config.dart';
+import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
 import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
@@ -57,6 +58,10 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
             return CircularIndicator(height: 500);
           } else {
             print("Popular- Displaying State");
+            //
+            List<String> _genreList = GenreBox.getAllGenreList();
+            print('_genreList : ${_genreList.toString()}');
+            //
             final fetchedState = state as MoviesFetchedState;
             final movies = fetchedState.movies;
             return buildSlider(movies);
@@ -91,6 +96,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
             bool _isCenterPage = pageIndex == _imageIndex;
             String _posterPath = Config.baseImageUrl + item.posterPath;
             String _title = item.title;
+            String _genres = GenreBox.getGenreListString(item.genreIds) ?? "";
             return Container(
               child: Image.network(
                 _posterPath,
@@ -160,7 +166,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                           margin: EdgeInsets.only(
                               right: scaleConfig.scaleWidth(140)),
                           child: Text(
-                            'Crime Drama Thrilller Sci-Fi',
+                            _genres,
                             maxLines: 2,
                             style: TextStyle(
                               color:
