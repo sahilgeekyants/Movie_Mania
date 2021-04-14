@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_mania/services/config/config.dart';
-import 'package:movie_mania/services/config/shared_preference.dart';
 import 'package:movie_mania/utils/constants/api_request_types.dart';
 import 'package:movie_mania/utils/constants/messages.dart';
 import 'response.dart';
