@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_mania/models/movies_model.dart';
+import 'package:movie_mania/models/ui_data_models/movies_model.dart';
 
 abstract class MoviesListingState {}
 

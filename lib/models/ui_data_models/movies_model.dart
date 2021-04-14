@@ -5,7 +5,7 @@ class MoviesModel {
   List<_Result> _results = [];
 
   MoviesModel.fromJson(Map<String, dynamic> parsedJson) {
-    print(parsedJson['results'].length);
+    print("total results : ${parsedJson['results'].length}");
     _page = parsedJson['page'];
     _totalResults = parsedJson['total_results'];
     _totalPages = parsedJson['total_pages'];
@@ -30,7 +30,7 @@ class _Result {
   int _voteCount;
   int _id;
   bool _video;
-  String _voteAverage;
+  double _voteAverage;
   String _title;
   double _popularity;
   String _posterPath;
@@ -46,9 +46,9 @@ class _Result {
     _voteCount = result['vote_count'];
     _id = result['id'];
     _video = result['video'];
-    _voteAverage = result['vote_average'].toString();
+    _voteAverage = result['vote_average'].toDouble();
     _title = result['title'];
-    _popularity = result['popularity'];
+    _popularity = result['popularity'].toDouble();
     _posterPath = result['poster_path'];
     _originalLanguage = result['original_language'];
     _originalTitle = result['original_title'];
@@ -81,7 +81,7 @@ class _Result {
 
   String get title => _title;
 
-  String get voteAverage => _voteAverage;
+  double get voteAverage => _voteAverage;
 
   bool get video => _video;
 
