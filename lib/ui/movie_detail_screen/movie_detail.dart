@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mania/services/local_db_services/boxes/recently_opened_movies_box.dart';
 import 'package:movie_mania/utils/image_data.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 
@@ -20,6 +21,18 @@ class MovieDetailArguments {
 }
 
 class _MovieDetailState extends State<MovieDetail> {
+  @override
+  void initState() {
+    super.initState();
+    print('Recent Opened movies :');
+    RecentlyOpenedMoviesBox.openBox();
+    if (RecentlyOpenedMoviesBox.hasData()) {
+      RecentlyOpenedMoviesBox.getAllMoviesSortedByTime().forEach((key, value) {
+        print('$key : ${value.title}');
+      });
+    }
+  }
+
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
   //image data temporary
   // static final List<String> imageData = ImageData.getDestinationsData;
