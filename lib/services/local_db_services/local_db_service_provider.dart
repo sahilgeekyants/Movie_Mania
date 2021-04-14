@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:hive/hive.dart';
+import 'package:movie_mania/models/db_data_models/movie_data_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
@@ -15,6 +16,7 @@ class LocalDBServiceProvider {
       Directory documentsDirectory = await getApplicationDocumentsDirectory();
       _path = join(documentsDirectory.path, _dbName);
       Hive.init(_path);
+      Hive.registerAdapter(MovieDataModelAdapter());
     }
   }
 
