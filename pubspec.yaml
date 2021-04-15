@@ -27,6 +27,8 @@ dependencies:
   flutter_bloc: ^0.21.0
   carousel_slider: ^3.0.0
   shared_preferences:
+  sqflite:
+  path_provider:
 
 dev_dependencies:
   flutter_test:

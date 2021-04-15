@@ -32,7 +32,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      title: "Movie Mania",
+      title: "MovieMania",
       theme: ThemeData(
         fontFamily: 'Roboto',
         primarySwatch: white,
