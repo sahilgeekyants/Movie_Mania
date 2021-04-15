@@ -68,7 +68,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
         CarouselSlider(
           carouselController: sliderController,
           options: CarouselOptions(
-            height: scaleConfig.scaleHeight(250),
+            height: scaleConfig.scaleHeight(350),
             enableInfiniteScroll: true,
             autoPlay: true,
             aspectRatio: 2,
