@@ -6,8 +6,8 @@ import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_events.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
 import 'package:movie_mania/models/movies_model.dart';
+import 'package:movie_mania/services/config/config.dart';
 import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
-// import 'package:movie_mania/utils/image_data.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
 import 'package:movie_mania/utils/widgets/message.dart';
@@ -19,8 +19,6 @@ class RecentImageSlider extends StatefulWidget {
 
 class _RecentImageSliderState extends State<RecentImageSlider> {
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
-  //image data temporary
-  // static final List<String> imageData = ImageData.getDestinationsData;
   CarouselController sliderController;
   int pageIndex;
   @override
@@ -49,22 +47,18 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
       child: BlocBuilder(
         bloc: BlocProvider.of<MoviesBloc>(context),
         builder: (context, state) {
-          if (state is MoviesUninitializedState) {
-            print("Recent- Unintialised State");
-            return CircularIndicator(height: 500);
-          } else if (state is MoviesEmptyState) {
-            print("Recent- No Players found");
-            return Message(message: "No Players found");
-          } else if (state is MoviesEmptyState) {
-            print("Recent- Something went wrong");
-            return Message(message: "Something went wrong");
-          } else if (state is MoviesFetchingState) {
-            print("Recent- Progess State");
+          if (state is MoviesErrorState) {
+            final MoviesErrorState fetchedState = state;
+            print("Popular ErrorState msg: ${fetchedState.errMsg}");
+            return Message(message: fetchedState.errMsg);
+          } else if (state is MoviesLoadingState) {
+            final MoviesLoadingState fetchedState = state;
+            print("Popular- Progess State msg: ${fetchedState.msg}");
             return CircularIndicator(height: 500);
           } else {
-            print("Recent- Displaying State");
-            final stateAsPlayerFetchedState = state;
-            final movies = stateAsPlayerFetchedState.movies;
+            print("Popular- Displaying State");
+            final fetchedState = state as MoviesFetchedState;
+            final movies = fetchedState.movies;
             return buildSlider(movies);
           }
         },
@@ -92,15 +86,14 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
               });
             },
           ),
-          // items: imageData.map((item) {
           items: movies.results.map((item) {
             int _imageIndex = movies.results.indexOf(item);
             bool _isCenterPage = pageIndex == _imageIndex;
-            String posterPath =
-                'https://image.tmdb.org/t/p/w185${item.poster_path}';
+            String _posterPath = Config.baseImageUrl + item.posterPath;
+            String _title = item.title;
             return Container(
               child: Image.network(
-                posterPath,
+                _posterPath,
                 fit: BoxFit.cover,
                 width: scaleConfig.scaleWidth(320),
                 height: scaleConfig.scaleHeight(_isCenterPage ? 450 : 380),
@@ -123,7 +116,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                   navigatorKey.currentState.pushNamed(
                                     MovieDetail.routeName,
                                     arguments: MovieDetailArguments(
-                                      moviePosterUrl: posterPath,
+                                      moviePosterUrl: _posterPath,
                                     ),
                                   );
                                 }
@@ -148,8 +141,10 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                           padding: EdgeInsets.only(
                               top: scaleConfig.scaleHeight(15),
                               bottom: scaleConfig.scaleHeight(10)),
+                          margin: EdgeInsets.only(
+                              right: scaleConfig.scaleWidth(75)),
                           child: Text(
-                            'Joker',
+                            _title,
                             maxLines: 1,
                             style: TextStyle(
                               color: _isCenterPage
@@ -162,9 +157,11 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                         ),
                         //Movie Tags
                         Container(
+                          margin: EdgeInsets.only(
+                              right: scaleConfig.scaleWidth(140)),
                           child: Text(
-                            'Crime, Drama, Thriller',
-                            maxLines: 1,
+                            'Crime Drama Thrilller Sci-Fi',
+                            maxLines: 2,
                             style: TextStyle(
                               color:
                                   _isCenterPage ? Colors.black45 : Colors.grey,

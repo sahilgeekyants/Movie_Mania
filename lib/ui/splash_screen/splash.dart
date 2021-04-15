@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_mania/app.dart';
+import 'package:movie_mania/services/config/shared_preference.dart';
 import 'package:movie_mania/ui/home_screen/home.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
 
@@ -16,6 +17,11 @@ class _SplashState extends State<Splash> {
     navigatorKey.currentState.pushReplacementNamed(Home.routeName);
   }
 
+  void appSetUp() {
+    //initialize shared Prefrence
+    localStorage.setLocalStorage();
+  }
+
   startTime() async {
     var _duration = Duration(seconds: 2);
     return Timer(_duration, navigationPage);
@@ -28,6 +34,7 @@ class _SplashState extends State<Splash> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+    appSetUp();
     startTime();
   }
 
