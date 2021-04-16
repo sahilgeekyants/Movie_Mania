@@ -105,23 +105,28 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
                             child: GestureDetector(
                               onTap: () async {
                                 print('Image clicked index : $_imageIndex');
-                                //Add this to Recently opened Movies Box of DB
-                                await RecentlyOpenedMoviesBox.addMovie(
-                                  MovieDataModel(
-                                    id: item.id,
-                                    title: item.title,
-                                    posterPath: item.posterPath,
-                                    genreIds: item.genreIds,
-                                    overview: item.overview,
-                                    bookmarked: false,
-                                    lastOpened: DateTime.now(),
-                                  ),
-                                );
-                                //
+                                // //Add this to Recently opened Movies Box of DB
+                                // await RecentlyOpenedMoviesBox.addMovie(
+                                //   MovieDataModel(
+                                //     id: item.id,
+                                //     title: item.title,
+                                //     posterPath: item.posterPath,
+                                //     genreIds: item.genreIds,
+                                //     overview: item.overview,
+                                //     bookmarked: false,
+                                //     lastOpened: DateTime.now(),
+                                //   ),
+                                // );
+                                // //
                                 navigatorKey.currentState.pushNamed(
                                   MovieDetail.routeName,
                                   arguments: MovieDetailArguments(
+                                    id: item.id ?? -1,
+                                    rating: item.voteAverage,
+                                    title: item.title ?? "",
+                                    genres: _genres,
                                     moviePosterUrl: _posterPath,
+                                    movieOverview: item.overview ?? "",
                                   ),
                                 );
                               },
