@@ -39,45 +39,54 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return BlocProvider(
       builder: (BuildContext context) => _moviesBloc,
-      child: Scaffold(
-        appBar: HomeAppBar.getAppBar(),
-        bottomNavigationBar: HomeBottomNavigationBar(),
-        body: SafeArea(
-          top: false,
-          bottom: false,
-          child:
-              // RefreshIndicator(
-              //   onRefresh: () async {
-              //     //
-              //   },
-              //   child:
-              ListView(
-            physics: ClampingScrollPhysics(),
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(
-                  left: scaleConfig.scaleWidth(55),
-                  top: scaleConfig.scaleHeight(20),
-                  bottom: scaleConfig.scaleHeight(15),
-                ),
-                child: Text(
-                  'Popular',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: scaleConfig.scaleWidth(23),
-                    fontWeight: FontWeight.bold,
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: HomeAppBar.getAppBar(),
+            body: SafeArea(
+              top: false,
+              bottom: false,
+              child:
+                  // RefreshIndicator(
+                  //   onRefresh: () async {
+                  //     //
+                  //   },
+                  //   child:
+                  ListView(
+                physics: ClampingScrollPhysics(),
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: scaleConfig.scaleWidth(55),
+                      top: scaleConfig.scaleHeight(20),
+                      bottom: scaleConfig.scaleHeight(15),
+                    ),
+                    child: Text(
+                      'Popular',
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: scaleConfig.scaleWidth(23),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                  //Poplar Movies images
+                  RecentImageSlider(),
+                  //Popular section
+                  SizedBox(height: scaleConfig.scaleHeight(40)),
+                  PopularImageSlider(),
+                ],
               ),
-              //Poplar Movies images
-              RecentImageSlider(),
-              //Popular section
-              SizedBox(height: scaleConfig.scaleHeight(40)),
-              PopularImageSlider(),
-            ],
+              // ),
+            ),
           ),
-          // ),
-        ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: HomeBottomNavigationBar(),
+          )
+        ],
       ),
     );
   }
