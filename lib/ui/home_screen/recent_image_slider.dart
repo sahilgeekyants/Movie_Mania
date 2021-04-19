@@ -128,6 +128,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                   //     overview: item.overview,
                                   //     bookmarked: false,
                                   //     lastOpened: DateTime.now(),
+                                  //     rating: item.voteAverage,
                                   //   ),
                                   // );
                                   // //

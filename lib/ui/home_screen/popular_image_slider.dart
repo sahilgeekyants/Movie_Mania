@@ -115,6 +115,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
                                 //     overview: item.overview,
                                 //     bookmarked: false,
                                 //     lastOpened: DateTime.now(),
+                                //     rating: item.voteAverage,
                                 //   ),
                                 // );
                                 // //
