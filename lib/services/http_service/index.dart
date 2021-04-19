@@ -17,11 +17,6 @@ class HttpService {
       throw _errorResponse(
           "You can not pass body or encoding to GET or DELETE request");
     if (headers == null) {
-      // var token = await localStorage.getToken();
-      // myHeaders = {
-      //   "Authorization": "Bearer $token",
-      //   "content-type": "application/json"
-      // };
       myHeaders = {};
     } else {
       myHeaders = headers;
