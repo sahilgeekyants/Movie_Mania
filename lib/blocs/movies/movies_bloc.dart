@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_events.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
-import 'package:movie_mania/models/movies_model.dart';
+import 'package:movie_mania/models/ui_data_models/movies_model.dart';
 import 'package:movie_mania/repository/movies_repository.dart';
 import 'package:movie_mania/services/http_service/response.dart';
 import 'package:movie_mania/utils/constants/messages.dart';
@@ -37,15 +37,16 @@ class MoviesBloc extends Bloc<MoviesListingEvent, MoviesListingState> {
     if (event == MoviesListingEvent.display) {
       _response = await _repository.fetchAllMovies();
       _movies = _response.body;
-    }
-    if (_movies != null) {
-      if (_movies.results.length == 0) {
-        yield MoviesErrorState(errMsg: ToastMessages.errorMessage["emptyData"]);
+      if (_movies != null) {
+        if (_movies.results.length == 0) {
+          yield MoviesErrorState(
+              errMsg: ToastMessages.errorMessage["emptyData"]);
+        } else {
+          yield MoviesFetchedState(movies: _movies);
+        }
       } else {
-        yield MoviesFetchedState(movies: _movies);
+        yield MoviesErrorState(errMsg: _response.message); //
       }
-    } else {
-      yield MoviesErrorState(errMsg: _response.message); //
     }
   }
 }

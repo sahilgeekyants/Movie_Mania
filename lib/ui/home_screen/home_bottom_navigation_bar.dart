@@ -43,33 +43,36 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
           topLeft: Radius.circular(30.0),
           topRight: Radius.circular(30.0),
         ),
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: scaleConfig.scaleWidth(30)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              BottomNavigationItem(
-                label: 'Feed',
-                iconData: Icons.description_outlined,
-                itemIndex: 0,
-                isItemSelected: _currentIndex == 0,
-                onTap: onItemSelected,
-              ),
-              BottomNavigationItem(
-                label: 'Star',
-                iconData: Icons.bookmark_outline_rounded,
-                itemIndex: 1,
-                isItemSelected: _currentIndex == 1,
-                onTap: onItemSelected,
-              ),
-              BottomNavigationItem(
-                label: 'Person',
-                iconData: Icons.person_outline,
-                itemIndex: 2,
-                isItemSelected: _currentIndex == 2,
-                onTap: onItemSelected,
-              ),
-            ],
+        child: Material(
+          child: Container(
+            margin:
+                EdgeInsets.symmetric(horizontal: scaleConfig.scaleWidth(30)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                BottomNavigationItem(
+                  label: 'Feed',
+                  iconData: Icons.description_outlined,
+                  itemIndex: 0,
+                  isItemSelected: _currentIndex == 0,
+                  onTap: onItemSelected,
+                ),
+                BottomNavigationItem(
+                  label: 'Star',
+                  iconData: Icons.bookmark_outline_rounded,
+                  itemIndex: 1,
+                  isItemSelected: _currentIndex == 1,
+                  onTap: onItemSelected,
+                ),
+                BottomNavigationItem(
+                  label: 'Person',
+                  iconData: Icons.person_outline,
+                  itemIndex: 2,
+                  isItemSelected: _currentIndex == 2,
+                  onTap: onItemSelected,
+                ),
+              ],
+            ),
           ),
         ),
       ),

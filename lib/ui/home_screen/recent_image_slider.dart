@@ -5,8 +5,11 @@ import 'package:movie_mania/app.dart';
 import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_events.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
-import 'package:movie_mania/models/movies_model.dart';
+import 'package:movie_mania/models/db_data_models/movie_data_model.dart';
+import 'package:movie_mania/models/ui_data_models/movies_model.dart';
 import 'package:movie_mania/services/config/config.dart';
+import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
+import 'package:movie_mania/services/local_db_services/boxes/recently_opened_movies_box.dart';
 import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
@@ -50,13 +53,14 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
           if (state is MoviesErrorState) {
             final MoviesErrorState fetchedState = state;
             print("Popular ErrorState msg: ${fetchedState.errMsg}");
-            return Message(message: fetchedState.errMsg);
+            return Message(message: fetchedState.errMsg, height: 400);
           } else if (state is MoviesLoadingState) {
             final MoviesLoadingState fetchedState = state;
             print("Popular- Progess State msg: ${fetchedState.msg}");
             return CircularIndicator(height: 500);
           } else {
             print("Popular- Displaying State");
+            //
             final fetchedState = state as MoviesFetchedState;
             final movies = fetchedState.movies;
             return buildSlider(movies);
@@ -91,6 +95,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
             bool _isCenterPage = pageIndex == _imageIndex;
             String _posterPath = Config.baseImageUrl + item.posterPath;
             String _title = item.title;
+            String _genres = GenreBox.getGenreListString(item.genreIds) ?? "";
             return Container(
               child: Image.network(
                 _posterPath,
@@ -109,14 +114,32 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(28)),
                             child: GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 //allow to click only center page in recent section
                                 if (_isCenterPage) {
                                   print('Image clicked index : $_imageIndex');
+                                  // //Add this to Recently opened Movies Box of DB
+                                  // await RecentlyOpenedMoviesBox.addMovie(
+                                  //   MovieDataModel(
+                                  //     id: item.id,
+                                  //     title: item.title,
+                                  //     posterPath: item.posterPath,
+                                  //     genreIds: item.genreIds,
+                                  //     overview: item.overview,
+                                  //     bookmarked: false,
+                                  //     lastOpened: DateTime.now(),
+                                  //   ),
+                                  // );
+                                  // //
                                   navigatorKey.currentState.pushNamed(
                                     MovieDetail.routeName,
                                     arguments: MovieDetailArguments(
+                                      id: item.id ?? -1,
+                                      rating: item.voteAverage,
+                                      title: item.title ?? "",
+                                      genres: _genres,
                                       moviePosterUrl: _posterPath,
+                                      movieOverview: item.overview ?? "",
                                     ),
                                   );
                                 }
@@ -160,7 +183,7 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                           margin: EdgeInsets.only(
                               right: scaleConfig.scaleWidth(140)),
                           child: Text(
-                            'Crime Drama Thrilller Sci-Fi',
+                            _genres,
                             maxLines: 2,
                             style: TextStyle(
                               color:

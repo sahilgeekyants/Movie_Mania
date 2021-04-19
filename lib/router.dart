@@ -16,8 +16,15 @@ class MyRouter {
         final MovieDetailArguments args =
             settings.arguments as MovieDetailArguments;
         return MaterialPageRoute(
-            builder: (context) =>
-                MovieDetail(moviePosterUrl: args.moviePosterUrl));
+          builder: (context) => MovieDetail(
+            id: args.id,
+            rating: args.rating,
+            title: args.title,
+            genres: args.genres,
+            moviePosterUrl: args.moviePosterUrl,
+            movieOverview: args.movieOverview,
+          ),
+        );
       default:
         return MaterialPageRoute(builder: (context) {
           return Scaffold(
