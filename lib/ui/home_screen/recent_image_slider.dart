@@ -135,12 +135,22 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
                                   navigatorKey.currentState.pushNamed(
                                     MovieDetail.routeName,
                                     arguments: MovieDetailArguments(
-                                      id: item.id ?? -1,
-                                      rating: item.voteAverage,
-                                      title: item.title ?? "",
-                                      genres: _genres,
-                                      moviePosterUrl: _posterPath,
-                                      movieOverview: item.overview ?? "",
+                                      // id: item.id ?? -1,
+                                      // rating: item.voteAverage,
+                                      // title: item.title ?? "",
+                                      // genres: _genres,
+                                      // moviePosterUrl: _posterPath,
+                                      // movieOverview: item.overview ?? "",
+                                      movieModel: MovieDataModel(
+                                        id: item.id,
+                                        title: item.title,
+                                        posterPath: item.posterPath,
+                                        genreIds: item.genreIds,
+                                        overview: item.overview,
+                                        bookmarked: false,
+                                        lastOpened: DateTime.now(),
+                                        rating: item.voteAverage,
+                                      ),
                                     ),
                                   );
                                 }
