@@ -170,13 +170,13 @@ class MoviesRepository {
               await RatedMoviesBox.deleteAllRatedMovies();
               List<int> _genres;
               //Fill new data coming from
-              _movieList.forEach((element) async {
+              _movieList.forEach((element) {
                 _genres = [];
                 element["genre_ids"].forEach((element) {
                   _genres.add(element);
                 });
                 print('fetched rated Movie data: ${element.toString()}');
-                await RatedMoviesBox.addMovie(
+                RatedMoviesBox.addMovie(
                   MovieDataModel(
                     id: element["id"],
                     title: element["title"],
@@ -212,11 +212,14 @@ class MoviesRepository {
     }
   }
 
-  Future rateMovie(int id, double rating) async {
-    if (id != null && rating >= 0 && rating <= 10) {
+  Future<bool> rateMovie(MovieDataModel movieModel) async {
+    bool _success = false;
+    if (movieModel.id != null &&
+        movieModel.rating >= 0 &&
+        movieModel.rating <= 10) {
       String _sessionId = await LocalDetailsBox.getGuestSessionId();
       String _url =
-          "$_baseUrl/movie/$id/rating?api_key=$_apiKey&guest_session_id=$_sessionId";
+          "$_baseUrl/movie/${movieModel.id}/rating?api_key=$_apiKey&guest_session_id=$_sessionId";
       print("url : $_url");
       Response _response;
       try {
@@ -224,16 +227,16 @@ class MoviesRepository {
           _url,
           ApiRequestType.POST,
           headers: {"Content-Type": "application/json;charset=utf-8"},
-          body: json.encode({"value": rating}),
+          body: json.encode({"value": movieModel.rating}),
         );
         print('responseStatus : ${_response.responseStatus}');
         if (_response.status) {
           // If the call to the server was successful
           Map<String, dynamic> parsedJson = _response.body;
           if (parsedJson["success"] == true) {
-            print("rated movie successfully");
-            //Fetch the rated movies
-            await fetchRatedMovies();
+            _success = true;
+            print("rated movie successfully: $_success");
+            await RatedMoviesBox.addMovie(movieModel);
             //
           } else {
             //false response
@@ -255,5 +258,6 @@ class MoviesRepository {
         // return Response(status: false, body: null, message: e.toString());
       }
     }
+    return _success;
   }
 }

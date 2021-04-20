@@ -26,9 +26,9 @@ class _SplashState extends State<Splash> {
     await _repository.fetchAndSaveGenreList();
     //Set Up Guest Session
     await _repository.setUpGuestSession();
+    //fetch data of already rated movies
+    await _repository.fetchRatedMovies();
     //
-    //rate an movie here temporarily
-    // await _repository.rateMovie(791373, 9.5);
   }
 
   startTime() async {
