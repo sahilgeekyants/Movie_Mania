@@ -43,7 +43,7 @@ class _MovieDetailBottomState extends State<MovieDetailBottom> {
       print('in didChangeDependencies _newRating : $_newRating');
       setState(() {
         _userRating = (_newRating > -1 ? _newRating : _userRating) ?? 0.0;
-        _isRated = _userRating > -1;
+        _isRated = _newRating > -1;
       });
     }
   }
@@ -110,8 +110,11 @@ class _MovieDetailBottomState extends State<MovieDetailBottom> {
                               print(
                                   'after rating, _newRating : $_newRating, value: $value');
                               setState(() {
-                                _userRating = _newRating;
-                                _isRated = _userRating > -1;
+                                _userRating = (_newRating > -1
+                                        ? _newRating
+                                        : _userRating) ??
+                                    0.0;
+                                _isRated = _newRating > -1;
                               });
                             }
                           },
