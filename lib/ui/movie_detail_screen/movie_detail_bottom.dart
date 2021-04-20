@@ -103,7 +103,6 @@ class _MovieDetailBottomState extends State<MovieDetailBottom> {
                                 rating: value,
                               ),
                             );
-                            // .rateMovie(widget.movieModel.id, value);
                             if (result == true) {
                               double _newRating =
                                   await RatedMoviesBox.getMovieRating(

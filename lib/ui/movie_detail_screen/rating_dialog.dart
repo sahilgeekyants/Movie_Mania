@@ -21,13 +21,13 @@ class RatingDialog extends StatelessWidget {
             Container(
               height: scaleConfig.scaleWidth(50),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.black,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(scaleConfig.scaleWidth(20)),
                     topRight: Radius.circular(scaleConfig.scaleWidth(20))),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
                     child: Container(
@@ -42,22 +42,6 @@ class RatingDialog extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           fontSize: scaleConfig.scaleWidth(23),
                         ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(
-                      right: scaleConfig.scaleWidth(9),
-                      top: scaleConfig.scaleWidth(3),
-                    ),
-                    child: Material(
-                      color: Colors.blue,
-                      child: IconButton(
-                        icon: Icon(Icons.delete),
-                        iconSize: scaleConfig.scaleWidth(28),
-                        color: Colors.white,
-                        padding: EdgeInsets.only(),
-                        onPressed: () async {},
                       ),
                     ),
                   ),
@@ -113,7 +97,7 @@ class RatingDialog extends StatelessWidget {
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      side: BorderSide(color: Colors.green[700])),
+                      side: BorderSide(color: Colors.black)),
                   onPressed: () async {
                     String text = controller.text;
                     double rating = double.parse(text);
@@ -126,10 +110,11 @@ class RatingDialog extends StatelessWidget {
                     }
                   },
                   textColor: Colors.white,
-                  color: Colors.green,
+                  color: Colors.black87,
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     "SUBMIT",
+                    style: TextStyle(fontSize: scaleConfig.scaleWidth(20)),
                   ),
                 ),
               ),
