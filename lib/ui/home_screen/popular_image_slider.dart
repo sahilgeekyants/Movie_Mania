@@ -123,12 +123,6 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
                                 navigatorKey.currentState.pushNamed(
                                   MovieDetail.routeName,
                                   arguments: MovieDetailArguments(
-                                    // id: item.id ?? -1,
-                                    // rating: item.voteAverage,
-                                    // title: item.title ?? "",
-                                    // genres: _genres,
-                                    // moviePosterUrl: _posterPath,
-                                    // movieOverview: item.overview ?? "",
                                     movieModel: MovieDataModel(
                                       id: item.id,
                                       title: item.title,
