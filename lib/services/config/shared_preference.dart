@@ -1,43 +1,43 @@
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
-class MyLocalStorage {
-  SharedPreferences _prefs;
+// class MyLocalStorage {
+//   SharedPreferences _prefs;
 
-  Future setLocalStorage() async {
-    if (_prefs == null) {
-      print("initialising the shared preference");
-      _prefs = await SharedPreferences.getInstance();
-    }
-  }
+//   Future setLocalStorage() async {
+//     if (_prefs == null) {
+//       print("initialising the shared preference");
+//       _prefs = await SharedPreferences.getInstance();
+//     }
+//   }
 
-  Future setSessionId(token) async {
-    _prefs.setString("session_id", token);
-  }
+//   Future setSessionId(token) async {
+//     _prefs.setString("session_id", token);
+//   }
 
-  Future getSessionId() async {
-    var _id = _prefs.getString("session_id");
-    return _id;
-  }
+//   Future getSessionId() async {
+//     var _id = _prefs.getString("session_id");
+//     return _id;
+//   }
 
-  // Future setDeviceId(String deviceId) async {
-  //   _prefs = await SharedPreferences.getInstance();
-  //   _prefs.setString("device_id", deviceId);
-  // }
+//   // Future setDeviceId(String deviceId) async {
+//   //   _prefs = await SharedPreferences.getInstance();
+//   //   _prefs.setString("device_id", deviceId);
+//   // }
 
-  // Future clearUserAndToken() async {
-  //   _prefs = await SharedPreferences.getInstance();
-  //   await _prefs.clear();
-  // }
+//   // Future clearUserAndToken() async {
+//   //   _prefs = await SharedPreferences.getInstance();
+//   //   await _prefs.clear();
+//   // }
 
-  // Future getUserId() async {
-  //   _prefs = await SharedPreferences.getInstance();
-  //   return _prefs.getInt("userId");
-  // }
+//   // Future getUserId() async {
+//   //   _prefs = await SharedPreferences.getInstance();
+//   //   return _prefs.getInt("userId");
+//   // }
 
-  // Future getDeviceId() async {
-  //   _prefs = await SharedPreferences.getInstance();
-  //   return _prefs.getString("device_id");
-  // }
-}
+//   // Future getDeviceId() async {
+//   //   _prefs = await SharedPreferences.getInstance();
+//   //   return _prefs.getString("device_id");
+//   // }
+// }
 
-MyLocalStorage localStorage = MyLocalStorage();
+// MyLocalStorage localStorage = MyLocalStorage();

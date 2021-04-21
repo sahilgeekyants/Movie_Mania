@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie_mania/app.dart';
-import 'package:movie_mania/services/config/shared_preference.dart';
+import 'package:movie_mania/repository/movies_repository.dart';
+import 'package:movie_mania/services/local_db_services/local_db_service_provider.dart';
 import 'package:movie_mania/ui/home_screen/home.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
 
@@ -13,17 +14,21 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  final MoviesRepository _repository = MoviesRepository();
   void navigationPage() {
     navigatorKey.currentState.pushReplacementNamed(Home.routeName);
   }
 
-  void appSetUp() {
-    //initialize shared Prefrence
-    localStorage.setLocalStorage();
+  appSetUp() async {
+    // initialize local DB
+    await LocalDBServiceProvider.initializeLocalDb();
+    //Add Genre Data
+    await _repository.fetchAndSaveGenreList();
   }
 
   startTime() async {
     var _duration = Duration(seconds: 2);
+    await appSetUp();
     return Timer(_duration, navigationPage);
   }
 
@@ -34,7 +39,6 @@ class _SplashState extends State<Splash> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    appSetUp();
     startTime();
   }
 
