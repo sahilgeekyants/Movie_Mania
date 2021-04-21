@@ -1,28 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_mania/blocs/movie_details/movie_detail_bloc.dart';
+import 'package:movie_mania/blocs/movie_details/movie_detail_listing_events.dart';
+import 'package:movie_mania/blocs/movie_details/movie_detail_listing_states.dart';
 import 'package:movie_mania/models/db_data_models/movie_data_model.dart';
 import 'package:movie_mania/services/config/config.dart';
 import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
-// import 'package:movie_mania/services/local_db_services/boxes/recently_opened_movies_box.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/custom_sliver_delegate.dart';
 import 'movie_detail_bottom.dart';
 
 class MovieDetail extends StatefulWidget {
   static const String routeName = '/movie_detail';
-  // final int id;
-  // final double rating;
-  // final String title;
-  // final String genres;
-  // final String moviePosterUrl;
-  // final String movieOverview;
   final MovieDataModel movieModel;
   MovieDetail({
-    // @required this.id,
-    // @required this.rating,
-    // @required this.title,
-    // @required this.genres,
-    // @required this.moviePosterUrl,
-    // @required this.movieOverview,
     @required this.movieModel,
   });
   @override
@@ -30,20 +21,8 @@ class MovieDetail extends StatefulWidget {
 }
 
 class MovieDetailArguments {
-  // final int id;
-  // final double rating;
-  // final String title;
-  // final String genres;
-  // final String moviePosterUrl;
-  // final String movieOverview;
   final MovieDataModel movieModel;
   MovieDetailArguments({
-    // @required this.id,
-    // @required this.rating,
-    // @required this.title,
-    // @required this.genres,
-    // @required this.moviePosterUrl,
-    // @required this.movieOverview,
     @required this.movieModel,
   });
 }
@@ -52,18 +31,16 @@ class _MovieDetailState extends State<MovieDetail> {
   ScrollController _scrollController;
   String _genres;
   String _posterPath;
+  MovieDetailBloc _movieDetailBloc;
+  bool _blocStarted;
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     print('Recent Opened movies :');
     _posterPath = Config.baseImageUrl + widget.movieModel.posterPath;
-    // RecentlyOpenedMoviesBox.openBox();
-    // if (RecentlyOpenedMoviesBox.hasData()) {
-    //   RecentlyOpenedMoviesBox.getAllMoviesSortedByTime().forEach((key, value) {
-    //     print('$key : ${value.title}');
-    //   });
-    // }
+    _movieDetailBloc = MovieDetailBloc();
+    _blocStarted = false;
   }
 
   @override
@@ -72,6 +49,12 @@ class _MovieDetailState extends State<MovieDetail> {
     if (_genres == null) {
       _genres = GenreBox.getGenreListString(widget.movieModel.genreIds) ?? "";
     }
+  }
+
+  @override
+  void dispose() {
+    _movieDetailBloc.dispose();
+    super.dispose();
   }
 
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
@@ -124,19 +107,45 @@ class _MovieDetailState extends State<MovieDetail> {
                   },
                 ),
                 actions: [
-                  IconButton(
-                    padding: EdgeInsets.only(
-                      top: scaleConfig.scaleHeight(10),
-                      right: scaleConfig.scaleWidth(40),
-                    ),
-                    icon: Icon(
-                      Icons.bookmark_outline_rounded,
-                      color: Colors.white,
-                      size: scaleConfig.scaleWidth(40),
-                    ),
-                    onPressed: () {
-                      print(
-                          'Bookmark pressed on page id:${widget.movieModel.id}');
+                  BlocBuilder<MovieDetailBloc, MovieDetailListingState>(
+                    bloc: _movieDetailBloc,
+                    builder: (context, state) {
+                      if (!_blocStarted) {
+                        _blocStarted = true;
+                        _movieDetailBloc.dispatch(StartEvent(
+                            movieId: widget.movieModel.id,
+                            isBookmarked: state.isBookmarked));
+                      }
+                      return IconButton(
+                        padding: EdgeInsets.only(
+                          top: scaleConfig.scaleHeight(10),
+                          right: scaleConfig.scaleWidth(40),
+                        ),
+                        icon: Icon(
+                          state.isBookmarked
+                              ? Icons.bookmark_outlined
+                              : Icons.bookmark_outline_rounded,
+                          color: Colors.white,
+                          size: scaleConfig.scaleWidth(40),
+                        ),
+                        onPressed: () {
+                          if (!(state is MovieDetailLoadingState)) {
+                            print(
+                                'Bookmark pressed on page id:${widget.movieModel.id}');
+                            if (state.isBookmarked) {
+                              //Unbookmark here
+                              _movieDetailBloc.dispatch(UnBookmarkEvent(
+                                  movieId: widget.movieModel.id,
+                                  isBookmarked: state.isBookmarked));
+                            } else {
+                              //Bookmark here
+                              _movieDetailBloc.dispatch(BookmarkEvent(
+                                  movieId: widget.movieModel.id,
+                                  isBookmarked: state.isBookmarked));
+                            }
+                          }
+                        },
+                      );
                     },
                   ),
                 ],
