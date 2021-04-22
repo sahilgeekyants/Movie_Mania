@@ -32,7 +32,6 @@ class _MovieDetailState extends State<MovieDetail> {
   String _genres;
   String _posterPath;
   MovieDetailBloc _movieDetailBloc;
-  bool _blocStarted;
   @override
   void initState() {
     super.initState();
@@ -40,7 +39,8 @@ class _MovieDetailState extends State<MovieDetail> {
     print('Recent Opened movies :');
     _posterPath = Config.baseImageUrl + widget.movieModel.posterPath;
     _movieDetailBloc = MovieDetailBloc();
-    _blocStarted = false;
+    _movieDetailBloc.dispatch(
+        StartEvent(movieId: widget.movieModel.id, isBookmarked: false));
   }
 
   @override
@@ -110,12 +110,6 @@ class _MovieDetailState extends State<MovieDetail> {
                   BlocBuilder<MovieDetailBloc, MovieDetailListingState>(
                     bloc: _movieDetailBloc,
                     builder: (context, state) {
-                      if (!_blocStarted) {
-                        _blocStarted = true;
-                        _movieDetailBloc.dispatch(StartEvent(
-                            movieId: widget.movieModel.id,
-                            isBookmarked: state.isBookmarked));
-                      }
                       return IconButton(
                         padding: EdgeInsets.only(
                           top: scaleConfig.scaleHeight(10),

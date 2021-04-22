@@ -4,6 +4,7 @@ import 'package:movie_mania/models/db_data_models/movie_data_model.dart';
 import 'package:movie_mania/services/config/config.dart';
 import 'package:movie_mania/services/http_service/index.dart';
 import 'package:movie_mania/services/http_service/response.dart';
+import 'package:movie_mania/services/local_db_services/boxes/bookmarked_movies_box.dart';
 import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
 import 'package:movie_mania/services/local_db_services/boxes/local_details_box.dart';
 import 'package:movie_mania/services/local_db_services/boxes/rated_movies_box.dart';
@@ -259,5 +260,17 @@ class MoviesRepository {
       }
     }
     return _success;
+  }
+
+  Future<bool> isMovieBookmarked(int id) async {
+    return await BookmarkedMoviesBox.isMovieBookmarked(id);
+  }
+
+  Future bookmarkMovie(int id) async {
+    await BookmarkedMoviesBox.addMovie(id);
+  }
+
+  Future unbookmarkMovie(int id) async {
+    await BookmarkedMoviesBox.deleteMovie(id);
   }
 }

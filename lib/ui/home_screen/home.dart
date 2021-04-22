@@ -50,8 +50,8 @@ class _HomeState extends State<Home> {
               child: RefreshIndicator(
                 displacement: scaleConfig.scaleHeight(80),
                 strokeWidth: scaleConfig.scaleWidth(3),
-                color: Colors.green,
-                backgroundColor: Colors.black54,
+                color: Colors.black,
+                backgroundColor: Colors.white,
                 onRefresh: () async {
                   await Future.delayed(Duration(seconds: 2), () async {
                     _moviesBloc.dispatch(MoviesListingEvent.display);
