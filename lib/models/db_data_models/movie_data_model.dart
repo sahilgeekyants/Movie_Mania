@@ -17,6 +17,8 @@ class MovieDataModel {
   final bool bookmarked;
   @HiveField(6)
   final DateTime lastOpened;
+  @HiveField(7)
+  final double rating;
 
   MovieDataModel({
     this.id,
@@ -26,5 +28,6 @@ class MovieDataModel {
     this.overview,
     this.bookmarked,
     this.lastOpened,
+    this.rating,
   });
 }
