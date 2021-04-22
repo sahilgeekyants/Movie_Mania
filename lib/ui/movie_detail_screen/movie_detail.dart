@@ -1,59 +1,60 @@
 import 'package:flutter/material.dart';
-// import 'package:movie_mania/services/local_db_services/boxes/recently_opened_movies_box.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_mania/blocs/movie_details/movie_detail_bloc.dart';
+import 'package:movie_mania/blocs/movie_details/movie_detail_listing_events.dart';
+import 'package:movie_mania/blocs/movie_details/movie_detail_listing_states.dart';
+import 'package:movie_mania/models/db_data_models/movie_data_model.dart';
+import 'package:movie_mania/services/config/config.dart';
+import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/custom_sliver_delegate.dart';
 import 'movie_detail_bottom.dart';
 
 class MovieDetail extends StatefulWidget {
   static const String routeName = '/movie_detail';
-  final int id;
-  final double rating;
-  final String title;
-  final String genres;
-  final String moviePosterUrl;
-  final String movieOverview;
+  final MovieDataModel movieModel;
   MovieDetail({
-    @required this.id,
-    @required this.rating,
-    @required this.title,
-    @required this.genres,
-    @required this.moviePosterUrl,
-    @required this.movieOverview,
+    @required this.movieModel,
   });
   @override
   _MovieDetailState createState() => _MovieDetailState();
 }
 
 class MovieDetailArguments {
-  final int id;
-  final double rating;
-  final String title;
-  final String genres;
-  final String moviePosterUrl;
-  final String movieOverview;
+  final MovieDataModel movieModel;
   MovieDetailArguments({
-    @required this.id,
-    @required this.rating,
-    @required this.title,
-    @required this.genres,
-    @required this.moviePosterUrl,
-    @required this.movieOverview,
+    @required this.movieModel,
   });
 }
 
 class _MovieDetailState extends State<MovieDetail> {
   ScrollController _scrollController;
+  String _genres;
+  String _posterPath;
+  MovieDetailBloc _movieDetailBloc;
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
     print('Recent Opened movies :');
-    // RecentlyOpenedMoviesBox.openBox();
-    // if (RecentlyOpenedMoviesBox.hasData()) {
-    //   RecentlyOpenedMoviesBox.getAllMoviesSortedByTime().forEach((key, value) {
-    //     print('$key : ${value.title}');
-    //   });
-    // }
+    _posterPath = Config.baseImageUrl + widget.movieModel.posterPath;
+    _movieDetailBloc = MovieDetailBloc();
+    _movieDetailBloc.dispatch(
+        StartEvent(movieId: widget.movieModel.id, isBookmarked: false));
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    if (_genres == null) {
+      _genres = GenreBox.getGenreListString(widget.movieModel.genreIds) ?? "";
+    }
+  }
+
+  @override
+  void dispose() {
+    _movieDetailBloc.dispose();
+    super.dispose();
   }
 
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
@@ -71,7 +72,7 @@ class _MovieDetailState extends State<MovieDetail> {
           height: SizeScaleConfig.screenHeight * 0.6,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(widget.moviePosterUrl),
+              image: NetworkImage(_posterPath),
               fit: BoxFit.cover,
             ),
           ),
@@ -101,24 +102,44 @@ class _MovieDetailState extends State<MovieDetail> {
                   ),
                   onPressed: () {
                     print(
-                        'Going back from Detail page- id:${widget.moviePosterUrl}');
+                        'Going back from Detail page- id:${widget.movieModel.id}');
                     Navigator.pop(context);
                   },
                 ),
                 actions: [
-                  IconButton(
-                    padding: EdgeInsets.only(
-                      top: scaleConfig.scaleHeight(10),
-                      right: scaleConfig.scaleWidth(40),
-                    ),
-                    icon: Icon(
-                      Icons.bookmark_outline_rounded,
-                      color: Colors.white,
-                      size: scaleConfig.scaleWidth(40),
-                    ),
-                    onPressed: () {
-                      print(
-                          'Bookmark pressed on page id:${widget.moviePosterUrl}');
+                  BlocBuilder<MovieDetailBloc, MovieDetailListingState>(
+                    bloc: _movieDetailBloc,
+                    builder: (context, state) {
+                      return IconButton(
+                        padding: EdgeInsets.only(
+                          top: scaleConfig.scaleHeight(10),
+                          right: scaleConfig.scaleWidth(40),
+                        ),
+                        icon: Icon(
+                          state.isBookmarked
+                              ? Icons.bookmark_outlined
+                              : Icons.bookmark_outline_rounded,
+                          color: Colors.white,
+                          size: scaleConfig.scaleWidth(40),
+                        ),
+                        onPressed: () {
+                          if (!(state is MovieDetailLoadingState)) {
+                            print(
+                                'Bookmark pressed on page id:${widget.movieModel.id}');
+                            if (state.isBookmarked) {
+                              //Unbookmark here
+                              _movieDetailBloc.dispatch(UnBookmarkEvent(
+                                  movieId: widget.movieModel.id,
+                                  isBookmarked: state.isBookmarked));
+                            } else {
+                              //Bookmark here
+                              _movieDetailBloc.dispatch(BookmarkEvent(
+                                  movieId: widget.movieModel.id,
+                                  isBookmarked: state.isBookmarked));
+                            }
+                          }
+                        },
+                      );
                     },
                   ),
                 ],
@@ -134,7 +155,7 @@ class _MovieDetailState extends State<MovieDetail> {
                           SizedBox(height: scaleConfig.scaleWidth(70)),
                           //Title in Fading Area
                           Text(
-                            widget.title,
+                            widget.movieModel.title,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
@@ -198,7 +219,7 @@ class _MovieDetailState extends State<MovieDetail> {
                                       Flexible(
                                         flex: 8,
                                         child: Text(
-                                          widget.title,
+                                          widget.movieModel.title,
                                           textScaleFactor: 1,
                                           style: TextStyle(
                                             color: Colors.black,
@@ -221,7 +242,7 @@ class _MovieDetailState extends State<MovieDetail> {
                                       Flexible(
                                         flex: 3,
                                         child: Text(
-                                          widget.genres,
+                                          _genres ?? "",
                                           textScaleFactor: 1,
                                           style: TextStyle(
                                             color: Colors.grey,
@@ -246,7 +267,7 @@ class _MovieDetailState extends State<MovieDetail> {
                                   ),
                                   SizedBox(height: scaleConfig.scaleHeight(30)),
                                   Text(
-                                    widget.movieOverview,
+                                    widget.movieModel.overview,
                                     textScaleFactor: 1,
                                     maxLines: 12,
                                     overflow: TextOverflow.ellipsis,
@@ -310,7 +331,11 @@ class _MovieDetailState extends State<MovieDetail> {
           left: 0,
           right: 0,
           bottom: 0,
-          child: MovieDetailBottom(rating: widget.rating),
+          child: MovieDetailBottom(
+            // movieId: widget.id,
+            // rating: widget.rating,
+            movieModel: widget.movieModel,
+          ),
         )
       ],
     );

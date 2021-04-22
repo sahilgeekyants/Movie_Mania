@@ -24,13 +24,14 @@ class MovieDataModelAdapter extends TypeAdapter<MovieDataModel> {
       overview: fields[4] as String,
       bookmarked: fields[5] as bool,
       lastOpened: fields[6] as DateTime,
+      rating: fields[7] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, MovieDataModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class MovieDataModelAdapter extends TypeAdapter<MovieDataModel> {
       ..writeByte(5)
       ..write(obj.bookmarked)
       ..writeByte(6)
-      ..write(obj.lastOpened);
+      ..write(obj.lastOpened)
+      ..writeByte(7)
+      ..write(obj.rating);
   }
 
   @override

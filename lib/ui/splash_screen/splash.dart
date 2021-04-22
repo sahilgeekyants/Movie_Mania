@@ -24,6 +24,11 @@ class _SplashState extends State<Splash> {
     await LocalDBServiceProvider.initializeLocalDb();
     //Add Genre Data
     await _repository.fetchAndSaveGenreList();
+    //Set Up Guest Session
+    await _repository.setUpGuestSession();
+    //fetch data of already rated movies
+    await _repository.fetchRatedMovies();
+    //
   }
 
   startTime() async {
