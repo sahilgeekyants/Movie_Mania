@@ -6,12 +6,8 @@ import 'package:movie_mania/ui/movie_detail_screen/rating_dialog.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 
 class MovieDetailBottom extends StatefulWidget {
-  // final int movieId;
-  // final double rating;
   final MovieDataModel movieModel;
   MovieDetailBottom({
-    // @required this.movieId,
-    // @required this.rating,
     @required this.movieModel,
   });
   @override
