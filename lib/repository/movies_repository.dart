@@ -63,6 +63,47 @@ class MoviesRepository {
 
   // Future<TrailerModel> fetchTrailers(int movieId) => moviesApiProvider.fetchTrailer(movieId);
 
+  Future<Response> fetchSearchedMovies(String text, {int page = 1}) async {
+    String _url =
+        "$_baseUrl/search/movie?api_key=$_apiKey&language=$_language&sort_by=$_sortBy&page=$page&include_adult=false&query=$text";
+    print("url : $_url");
+    Response _response;
+    try {
+      _response = await HttpService.httpRequests(_url, ApiRequestType.GET);
+      print('search movies responseStatus : ${_response.responseStatus}');
+      if (_response.status) {
+        // If the call to the server was successful
+        Map<String, dynamic> parsedJson = _response.body;
+        if (parsedJson.isNotEmpty) {
+          //
+          MoviesModel _moviesModel = MoviesModel.fromJson(parsedJson);
+          return Response(
+            status: true,
+            body: _moviesModel,
+            message: ToastMessages.succesMessage["success"],
+          );
+        } else {
+          //Empty response
+          return Response(
+            status: false,
+            body: null,
+            message: ToastMessages.errorMessage["emptyData"],
+          );
+        }
+      } else {
+        // If that call was not successful, then return the error response
+        return _response;
+      }
+    } on Exception catch (e) {
+      String _errMsg = e.toString();
+      print('exception inside fetchAllMovies : $_errMsg}');
+      if (_errMsg.contains(ToastMessages.errorMessage[""])) {
+        //
+      }
+      return Response(status: false, body: null, message: e.toString());
+    }
+  }
+
   Future fetchAndSaveGenreList() async {
     await GenreBox.openBox();
     if (!GenreBox.hasData()) {
