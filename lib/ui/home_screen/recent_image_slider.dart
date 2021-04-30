@@ -1,16 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_mania/app.dart';
 import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_events.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
-import 'package:movie_mania/models/db_data_models/movie_data_model.dart';
 import 'package:movie_mania/models/ui_data_models/movies_model.dart';
-import 'package:movie_mania/services/config/config.dart';
-import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
-import 'package:movie_mania/services/local_db_services/boxes/recently_opened_movies_box.dart';
-import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
+import 'package:movie_mania/ui/home_screen/large_slider_child.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
 import 'package:movie_mania/utils/widgets/message.dart';
@@ -93,116 +88,10 @@ class _RecentImageSliderState extends State<RecentImageSlider> {
           items: movies.results.map((item) {
             int _imageIndex = movies.results.indexOf(item);
             bool _isCenterPage = pageIndex == _imageIndex;
-            String _posterPath = Config.baseImageUrl + item.posterPath;
-            String _title = item.title;
-            String _genres = GenreBox.getGenreListString(item.genreIds) ?? "";
-            return Container(
-              child: Image.network(
-                _posterPath,
-                fit: BoxFit.cover,
-                width: scaleConfig.scaleWidth(320),
-                height: scaleConfig.scaleHeight(_isCenterPage ? 450 : 380),
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  return Container(
-                    // color: Colors.yellowAccent,
-                    padding: EdgeInsets.only(right: scaleConfig.scaleWidth(20)),
-                    child: ListView(
-                      physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        //image
-                        Container(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(28)),
-                            child: GestureDetector(
-                              onTap: () async {
-                                //allow to click only center page in recent section
-                                if (_isCenterPage) {
-                                  print('Image clicked index : $_imageIndex');
-                                  // //Add this to Recently opened Movies Box of DB
-                                  // await RecentlyOpenedMoviesBox.addMovie(
-                                  //   MovieDataModel(
-                                  //     id: item.id,
-                                  //     title: item.title,
-                                  //     posterPath: item.posterPath,
-                                  //     genreIds: item.genreIds,
-                                  //     overview: item.overview,
-                                  //     bookmarked: false,
-                                  //     lastOpened: DateTime.now(),
-                                  //     rating: item.voteAverage,
-                                  //   ),
-                                  // );
-                                  // //
-                                  navigatorKey.currentState.pushNamed(
-                                    MovieDetail.routeName,
-                                    arguments: MovieDetailArguments(
-                                      movieModel: MovieDataModel(
-                                        id: item.id,
-                                        title: item.title,
-                                        posterPath: item.posterPath,
-                                        genreIds: item.genreIds,
-                                        overview: item.overview,
-                                        bookmarked: false,
-                                        lastOpened: DateTime.now(),
-                                        rating: item.voteAverage,
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                              child: child,
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(28)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey[600].withOpacity(0.2),
-                                spreadRadius: 0,
-                                blurRadius: 5,
-                                offset: Offset(0, _isCenterPage ? 10 : 0),
-                              ),
-                            ],
-                          ),
-                        ),
-                        //Movie Title
-                        Container(
-                          padding: EdgeInsets.only(
-                              top: scaleConfig.scaleHeight(15),
-                              bottom: scaleConfig.scaleHeight(10)),
-                          margin: EdgeInsets.only(
-                              right: scaleConfig.scaleWidth(75)),
-                          child: Text(
-                            _title,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: _isCenterPage
-                                  ? Colors.black
-                                  : Colors.grey[700],
-                              fontSize: scaleConfig.scaleWidth(28),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        //Movie Tags
-                        Container(
-                          margin: EdgeInsets.only(
-                              right: scaleConfig.scaleWidth(140)),
-                          child: Text(
-                            _genres,
-                            maxLines: 2,
-                            style: TextStyle(
-                              color:
-                                  _isCenterPage ? Colors.black45 : Colors.grey,
-                              fontSize: scaleConfig.scaleWidth(18),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+            return LargeSliderChild(
+              index: _imageIndex,
+              movie: item,
+              isCenterPage: _isCenterPage,
             );
           }).toList(),
         ),
