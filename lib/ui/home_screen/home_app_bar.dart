@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_mania/app.dart';
+import 'package:movie_mania/ui/search_screen/search.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 
 class HomeAppBar {
@@ -11,8 +13,6 @@ class HomeAppBar {
         padding: EdgeInsets.only(left: scaleConfig.scaleWidth(50)),
         iconSize: scaleConfig.scaleWidth(45),
         icon: Icon(
-          // Icons.movie_creation_rounded,
-          // Icons.theaters_outlined,
           Icons.movie_filter_outlined,
           color: Colors.black87,
         ),
@@ -38,8 +38,9 @@ class HomeAppBar {
             Icons.search,
             color: Colors.black87,
           ),
-          onPressed: () {
+          onPressed: () async {
             print('Search button pressed');
+            await navigatorKey.currentState.pushNamed(Search.routeName);
           },
         ),
       ],
