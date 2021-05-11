@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_bloc.dart';
 import 'package:movie_mania/blocs/movies/movies_listing_states.dart';
-import 'package:movie_mania/models/db_data_models/movie_data_model.dart';
 import 'package:movie_mania/models/ui_data_models/movies_model.dart';
-import 'package:movie_mania/services/config/config.dart';
-import 'package:movie_mania/services/local_db_services/boxes/genre_box.dart';
-import 'package:movie_mania/services/local_db_services/boxes/recently_opened_movies_box.dart';
-import 'package:movie_mania/ui/movie_detail_screen/movie_detail.dart';
+import 'package:movie_mania/ui/home_screen/small_slider_child.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 import 'package:movie_mania/utils/widgets/circularIndicator.dart';
 import 'package:movie_mania/utils/widgets/message.dart';
-import '../../app.dart';
 
 class PopularImageSlider extends StatefulWidget {
   @override
@@ -83,111 +78,7 @@ class _PopularImageSliderState extends State<PopularImageSlider> {
           ),
           items: movies.results.map((item) {
             int _imageIndex = movies.results.indexOf(item);
-            String _posterPath = Config.baseImageUrl + item.posterPath;
-            String _title = item.title;
-            String _genres = GenreBox.getGenreListString(item.genreIds) ?? "";
-            return Container(
-              child: Image.network(
-                _posterPath,
-                fit: BoxFit.cover,
-                width: scaleConfig.scaleWidth(120),
-                height: scaleConfig.scaleHeight(160),
-                frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                  return Container(
-                    padding: EdgeInsets.only(right: scaleConfig.scaleWidth(30)),
-                    child: ListView(
-                      physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        //image
-                        Container(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(22)),
-                            child: GestureDetector(
-                              onTap: () async {
-                                print('Image clicked index : $_imageIndex');
-                                // //Add this to Recently opened Movies Box of DB
-                                // await RecentlyOpenedMoviesBox.addMovie(
-                                //   MovieDataModel(
-                                //     id: item.id,
-                                //     title: item.title,
-                                //     posterPath: item.posterPath,
-                                //     genreIds: item.genreIds,
-                                //     overview: item.overview,
-                                //     bookmarked: false,
-                                //     lastOpened: DateTime.now(),
-                                //     rating: item.voteAverage,
-                                //   ),
-                                // );
-                                // //
-                                //
-                                navigatorKey.currentState.pushNamed(
-                                  MovieDetail.routeName,
-                                  arguments: MovieDetailArguments(
-                                    movieModel: MovieDataModel(
-                                      id: item.id,
-                                      title: item.title,
-                                      posterPath: item.posterPath,
-                                      genreIds: item.genreIds,
-                                      overview: item.overview,
-                                      bookmarked: false,
-                                      lastOpened: DateTime.now(),
-                                      rating: item.voteAverage,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: child,
-                            ),
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(22)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey[600].withOpacity(0.2),
-                                spreadRadius: 0,
-                                blurRadius: 2,
-                                offset: Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                        ),
-                        //Movie Title
-                        Container(
-                          padding: EdgeInsets.only(
-                              top: scaleConfig.scaleHeight(10),
-                              bottom: scaleConfig.scaleHeight(5)),
-                          margin: EdgeInsets.only(
-                              right: scaleConfig.scaleWidth(20)),
-                          child: Text(
-                            _title,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: scaleConfig.scaleWidth(22),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        //Movie Tags
-                        Container(
-                          margin: EdgeInsets.only(
-                              right: scaleConfig.scaleWidth(50)),
-                          child: Text(
-                            _genres,
-                            maxLines: 2,
-                            style: TextStyle(
-                              color: Colors.black45,
-                              fontSize: scaleConfig.scaleWidth(17),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            );
+            return SmallSliderChild(index: _imageIndex, movie: item);
           }).toList(),
         ),
       ],
