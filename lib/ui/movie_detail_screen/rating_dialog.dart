@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:movie_mania/utils/scale_config.dart';
 
-class RatingDialog extends StatelessWidget {
-  final TextEditingController controller;
-  final FocusNode focus;
+class RatingDialog extends StatefulWidget {
+  final double currentValue;
   final Function(double) onTap;
   RatingDialog({
-    @required this.controller,
-    @required this.focus,
+    @required this.currentValue,
     @required this.onTap,
   });
+
+  @override
+  _RatingDialogState createState() => _RatingDialogState();
+}
+
+class _RatingDialogState extends State<RatingDialog> {
+  double _values;
+
+  @override
+  void initState() {
+    super.initState();
+    _values = widget.currentValue;
+    print('Given value : ${widget.currentValue}');
+  }
+
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
   @override
   Widget build(BuildContext context) {
@@ -62,21 +75,31 @@ class RatingDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    TextFormField(
-                      controller: controller,
-                      focusNode: focus,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: "Enter number between 0 to 10",
-                        border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue)),
+                    Text(
+                      "Rating : ${_values.toString()}",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: scaleConfig.scaleWidth(25),
                       ),
-                      textInputAction: TextInputAction.done,
                     ),
+                    SizedBox(height: scaleConfig.scaleHeight(10)),
+                    Slider(
+                        activeColor: Colors.black,
+                        inactiveColor: Colors.grey[300],
+                        value: _values,
+                        min: 0,
+                        max: 10,
+                        onChanged: (double values) {
+                          double _newValue =
+                              double.parse(values.toStringAsFixed(1));
+                          print('selected value $_newValue');
+                          setState(() {
+                            if (_newValue != _values) {
+                              _values = _newValue;
+                            }
+                          });
+                        }),
                   ],
                 ),
               ),
@@ -99,13 +122,11 @@ class RatingDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.0),
                       side: BorderSide(color: Colors.black)),
                   onPressed: () async {
-                    String text = controller.text;
-                    double rating = double.parse(text);
+                    double rating = _values;
                     if (rating >= 0 && rating <= 10) {
+                      print('GIving rating : $rating');
                       //Run rating func
-                      await onTap(rating);
-                      controller.text = '';
-                      focus.unfocus();
+                      await widget.onTap(rating);
                       Navigator.pop(context);
                     }
                   },
