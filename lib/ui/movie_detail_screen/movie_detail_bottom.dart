@@ -18,14 +18,10 @@ class _MovieDetailBottomState extends State<MovieDetailBottom> {
   bool _isRated;
   double _userRating;
   final SizeScaleConfig scaleConfig = SizeScaleConfig();
-  TextEditingController controller;
-  FocusNode focusNode;
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();
-    focusNode = FocusNode();
     _userRating = widget.movieModel.rating ?? 0.0;
   }
 
@@ -46,8 +42,6 @@ class _MovieDetailBottomState extends State<MovieDetailBottom> {
 
   @override
   void dispose() {
-    controller.dispose();
-    focusNode.dispose();
     super.dispose();
   }
 
@@ -77,15 +71,12 @@ class _MovieDetailBottomState extends State<MovieDetailBottom> {
                 child: GestureDetector(
                   onTap: () async {
                     print('Pressed onTap of movie bottom button');
-                    controller.text = '';
-                    focusNode.unfocus();
                     await showDialog(
                       context: context,
                       barrierDismissible: true,
                       builder: (BuildContext _context) {
                         return RatingDialog(
-                          controller: controller,
-                          focus: focusNode,
+                          currentValue: _userRating ?? 0,
                           onTap: (double value) async {
                             bool result = await MoviesRepository().rateMovie(
                               MovieDataModel(

@@ -88,7 +88,8 @@ class _HttpServiceHelper {
       // return navigatorKey.currentState.pushAndRemoveUntil(
       //     MaterialPageRoute(builder: (context) => Register()),
       //     (route) => false);
-      return _errorResponse("Session Expired", response, url, headers, body);
+      return _errorResponse(
+          response.reasonPhrase, response, url, headers, body);
     } else if (_statusCode == 401) {
       //handle refresh token here
       // Response refreshResponse = await RefreshToken()
